@@ -64,99 +64,87 @@ class Interview:
 
 
 #创建mqsql的表语句
-'''
-    CREATE TABLE users (
-    user_id VARCHAR(255) PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    phone VARCHAR(15),
-    email VARCHAR(255),
-    username VARCHAR(255) UNIQUE,
-    password VARCHAR(255),
-    security_question TEXT,
-    email_verification_status BOOLEAN,
-    phone_verification_status BOOLEAN,
-    identify VARCHAR(255)
-);
-'''
-
-'''
-CREATE TABLE job_seekers (
-    user_id VARCHAR(255) PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
-);
-CREATE TABLE human_resources (
-    user_id VARCHAR(255) PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
-);
-CREATE TABLE admins (
-    user_id VARCHAR(255) PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
-);
-
-'''
-
-'''
-CREATE TABLE resumes (
-    resume_id VARCHAR(255) PRIMARY KEY,
-    user_id VARCHAR(255),
-    education_background TEXT,
-    work_experience TEXT,
-    skills_and_certificates TEXT,
-    personal_profile TEXT,
-    career_objective TEXT,
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
-);
-'''
-
-'''
-CREATE TABLE jobs (
-    job_id VARCHAR(255) PRIMARY KEY,
-    publisher_id VARCHAR(255),
-    description TEXT,
-    requirements TEXT,
-    salary_range VARCHAR(255),
-    location VARCHAR(255),
-    publish_date DATE,
-    status BOOLEAN,
-    FOREIGN KEY (publisher_id) REFERENCES users(user_id)
-);
-'''
-
-'''
-CREATE TABLE job_applications (
-    application_id VARCHAR(255) PRIMARY KEY,
-    job_seeker_id VARCHAR(255),
-    position_id VARCHAR(255),
-    status VARCHAR(255),
-    application_date DATE,
-    FOREIGN KEY (job_seeker_id) REFERENCES users(user_id),
-    FOREIGN KEY (position_id) REFERENCES jobs(job_id)
-);
-'''
-
-'''
-CREATE TABLE job_applications (
-    application_id VARCHAR(255) PRIMARY KEY,
-    job_seeker_id VARCHAR(255),
-    position_id VARCHAR(255),
-    status VARCHAR(255),
-    application_date DATE,
-    FOREIGN KEY (job_seeker_id) REFERENCES users(user_id),
-    FOREIGN KEY (position_id) REFERENCES jobs(job_id)
-);
-'''
-
-'''
-CREATE TABLE interviews (
-    interview_id VARCHAR(255) PRIMARY KEY,
-    position_id VARCHAR(255),
-    candidate_id VARCHAR(255),
-    interview_time DATETIME,
-    interview_format VARCHAR(255),
-    FOREIGN KEY (position_id) REFERENCES jobs(job_id),
-    FOREIGN KEY (candidate_id) REFERENCES users(user_id)
-);
-'''
+create_sql=[
+        """
+        CREATE TABLE IF NOT EXISTS users (
+            user_id VARCHAR(255) PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
+            phone VARCHAR(15),
+            email VARCHAR(255),
+            username VARCHAR(255) UNIQUE,
+            password VARCHAR(255),
+            security_question TEXT,
+            email_verification_status BOOLEAN,
+            phone_verification_status BOOLEAN,
+            identify VARCHAR(255)
+        );
+        """,
+        """
+        CREATE TABLE IF NOT EXISTS job_seekers (
+            user_id VARCHAR(255) PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
+            FOREIGN KEY (user_id) REFERENCES users(user_id)
+        );
+        """,
+        """
+        CREATE TABLE IF NOT EXISTS human_resources (
+            user_id VARCHAR(255) PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
+            FOREIGN KEY (user_id) REFERENCES users(user_id)
+        );
+        """,
+        """
+        CREATE TABLE IF NOT EXISTS admins (
+            user_id VARCHAR(255) PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
+            FOREIGN KEY (user_id) REFERENCES users(user_id)
+        );
+        """,
+        """
+        CREATE TABLE IF NOT EXISTS resumes (
+            resume_id VARCHAR(255) PRIMARY KEY,
+            user_id VARCHAR(255),
+            education_background TEXT,
+            work_experience TEXT,
+            skills_and_certificates TEXT,
+            personal_profile TEXT,
+            career_objective TEXT,
+            FOREIGN KEY (user_id) REFERENCES users(user_id)
+        );
+        """,
+        """
+        CREATE TABLE IF NOT EXISTS jobs (
+            job_id VARCHAR(255) PRIMARY KEY,
+            publisher_id VARCHAR(255),
+            description TEXT,
+            requirements TEXT,
+            salary_range VARCHAR(255),
+            location VARCHAR(255),
+            publish_date DATE,
+            status BOOLEAN,
+            FOREIGN KEY (publisher_id) REFERENCES users(user_id)
+        );
+        """,
+        """
+        CREATE TABLE IF NOT EXISTS job_applications (
+            application_id VARCHAR(255) PRIMARY KEY,
+            job_seeker_id VARCHAR(255),
+            position_id VARCHAR(255),
+            status VARCHAR(255),
+            application_date DATE,
+            FOREIGN KEY (job_seeker_id) REFERENCES users(user_id),
+            FOREIGN KEY (position_id) REFERENCES jobs(job_id)
+        );
+        """,
+        """
+        CREATE TABLE IF NOT EXISTS interviews (
+            interview_id VARCHAR(255) PRIMARY KEY,
+            position_id VARCHAR(255),
+            candidate_id VARCHAR(255),
+            interview_time DATETIME,
+            interview_format VARCHAR(255),
+            FOREIGN KEY (position_id) REFERENCES jobs(job_id),
+            FOREIGN KEY (candidate_id) REFERENCES users(user_id)
+        );
+        """
+    ]
