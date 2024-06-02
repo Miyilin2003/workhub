@@ -114,7 +114,7 @@ def register():
         if identify == 'JobSeeker':
             job_seeker = JobSeeker(user_id=user_id, name=name)
             db.session.add(job_seeker)
-        elif identify == 'HumanResources':
+        elif identify == 'HumanResource':
             human_resource = HumanResources(user_id=user_id, name=name)
             db.session.add(human_resource)
         elif identify == 'Admin':
