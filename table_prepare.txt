@@ -1,0 +1,5 @@
+pip install flask flask-sqlalchemy
+pip install pymysql
+1.运行create_database.py
+2.请在python环境下运行该命令：
+flask create_tables

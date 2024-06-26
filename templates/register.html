@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+</head>
+<body>
+    <h1>Register</h1>
+    <form method="post">
+        <label for="user_id">User ID:</label>
+        <input type="text" name="user_id" required><br>
+        <label for="name">Name:</label>
+        <input type="text" name="name" required><br>
+        <label for="phone">Phone:</label>
+        <input type="text" name="phone"><br>
+        <label for="email">Email:</label>
+        <input type="email" name="email"><br>
+        <label for="username">Username:</label>
+        <input type="text" name="username" required><br>
+        <label for="password">Password:</label>
+        <input type="password" name="password" required><br>
+        <label for="security_question">Security Question:</label>
+        <input type="text" name="security_question"><br>
+        <label for="identify">Identify:</label>
+        <select name="identify" required>
+            <option value="JobSeeker">JobSeeker</option>
+            <option value="HumanResource">HumanResource</option>
+            <option value="Admin">Admin</option>
+        </select><br>
+        <input type="submit" value="Register">
+    </form>
+</body>
+</html>
