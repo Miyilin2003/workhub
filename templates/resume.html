@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Resume</title>
+</head>
+<body>
+    <h1>Upload Resume</h1>
+    <form action="{{ url_for('upload_resume') }}" method="post" enctype="multipart/form-data">
+        <label for="user_id">User ID:</label>
+        <input type="text" id="user_id" name="user_id" required><br><br>
+
+        <label for="education_background">Education Background:</label>
+        <textarea id="education_background" name="education_background" rows="4" cols="50" required></textarea><br><br>
+
+        <label for="work_experience">Work Experience:</label>
+        <textarea id="work_experience" name="work_experience" rows="4" cols="50" required></textarea><br><br>
+
+        <label for="skills_and_certificates">Skills and Certificates:</label>
+        <textarea id="skills_and_certificates" name="skills_and_certificates" rows="4" cols="50" required></textarea><br><br>
+
+        <label for="career_objective">Career Objective:</label>
+        <textarea id="career_objective" name="career_objective" rows="4" cols="50" required></textarea><br><br>
+
+        <label for="resume_pdf">Upload Resume PDF:</label>
+        <input type="file" id="resume_pdf" name="resume_pdf" accept=".pdf" required><br><br>
+
+        <input type="submit" value="Upload Resume">
+    </form>
+
+    <script>
+        function generateResumeLink() {
+            const userId = document.getElementById('user_id').value;
+            if (userId) {
+                const resumeLink = `https://visiky.github.io/resume/?mode=edit&template=template1&user=${userId}`;
+                window.open(resumeLink, '_blank');
+            } else {
+                alert("Please enter User ID to generate resume link.");
+            }
+        }
+    </script>
+
+    <button onclick="generateResumeLink()">Generate Resume</button>
+</body>
+</html>
