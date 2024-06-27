@@ -4,7 +4,7 @@ from db import create_sql
 # MySQL连接参数
 host = 'localhost'
 user = 'root'
-password = '040428'
+password = '152668'
 database_name = 'jobseeker'
 
 # 创建数据库连接
@@ -13,7 +13,7 @@ connection = pymysql.connect(host=host, user=user, password=password)
 try:
     with connection.cursor() as cursor:
         # 创建数据库
-        cursor.execute(f"CREATE DATABASE IF NOT EXISTS {database_name}")
+        cursor.execute(f"CREATE DATABASE IF NOT EXISTS {database_name} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci")
         print(f"Database '{database_name}' created or already exists.")
 finally:
     connection.close()

@@ -130,29 +130,22 @@ create_sql=[
         """,
     """
     CREATE TABLE IF NOT EXISTS jobs (
-        job_id VARCHAR(255) PRIMARY KEY,
+        job_id INT AUTO_INCREMENT PRIMARY KEY,
         publisher_id VARCHAR(255),
         email VARCHAR(255),
         job_title VARCHAR(255),
         job_location VARCHAR(255),
-        job_region VARCHAR(255),
+        salary_range VARCHAR(255),
+        publish_date DATE,
+        status BOOLEAN,
         job_type ENUM('Part Time', 'Full Time'),
         job_description TEXT,
         company_name VARCHAR(255),
         company_tagline VARCHAR(255) NULL,
         company_description TEXT NULL,
         company_website VARCHAR(255) NULL,
-        company_website_fb VARCHAR(255) NULL,
-        company_website_tw VARCHAR(255) NULL,
-        company_website_li VARCHAR(255) NULL,
-        featured_image VARCHAR(255) NULL,
-        company_logo VARCHAR(255) NULL,
-        description TEXT,
-        requirements TEXT,
-        salary_range VARCHAR(255),
-        location VARCHAR(255),
-        publish_date DATE,
-        status BOOLEAN,
+        company_email VARCHAR(255) NULL,
+
         FOREIGN KEY (publisher_id) REFERENCES users(user_id)
     );
     """,
@@ -163,8 +156,7 @@ create_sql=[
             position_id VARCHAR(255),
             status VARCHAR(255),
             application_date DATE,
-            FOREIGN KEY (job_seeker_id) REFERENCES users(user_id),
-            FOREIGN KEY (position_id) REFERENCES jobs(job_id)
+            FOREIGN KEY (job_seeker_id) REFERENCES users(user_id)
         );
         """,
         """
@@ -174,7 +166,6 @@ create_sql=[
             candidate_id VARCHAR(255),
             interview_time DATETIME,
             interview_format VARCHAR(255),
-            FOREIGN KEY (position_id) REFERENCES jobs(job_id),
             FOREIGN KEY (candidate_id) REFERENCES users(user_id)
         );
         """

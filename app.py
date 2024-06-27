@@ -10,8 +10,8 @@ import requests
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 app.config['UPLOAD_FOLDER'] = 'uploads/'
-# 将040428改为自己的数据库密码，将jobseeking改为自己的数据库名
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:040428@localhost/jobseeker'
+# 将040428改为自己的数据库密码，将jobseeker改为自己的数据库名
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:152668@localhost/jobseeker'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -56,29 +56,22 @@ class Resume(db.Model):
 
 class Job(db.Model):
     __tablename__ = 'jobs'
-    job_id = db.Column(db.String(255), primary_key=True)
+    job_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     publisher_id = db.Column(db.String(255), db.ForeignKey('users.user_id'))
     email = db.Column(db.String(255))
     job_title = db.Column(db.String(255))
     job_location = db.Column(db.String(255))
-    job_region = db.Column(db.String(255))
+    salary_range = db.Column(db.String(255))
+    publish_date = db.Column(db.Date)
+    status = db.Column(db.Boolean)
     job_type = db.Column(db.Enum('Part Time', 'Full Time'))
     job_description = db.Column(db.Text)
     company_name = db.Column(db.String(255))
     company_tagline = db.Column(db.String(255), nullable=True)
     company_description = db.Column(db.Text, nullable=True)
     company_website = db.Column(db.String(255), nullable=True)
-    company_website_fb = db.Column(db.String(255), nullable=True)
-    company_website_tw = db.Column(db.String(255), nullable=True)
-    company_website_li = db.Column(db.String(255), nullable=True)
-    featured_image = db.Column(db.String(255), nullable=True)
-    company_logo = db.Column(db.String(255), nullable=True)
-    description = db.Column(db.Text)
-    requirements = db.Column(db.Text)
-    salary_range = db.Column(db.String(255))
-    location = db.Column(db.String(255))
-    publish_date = db.Column(db.Date)
-    status = db.Column(db.Boolean)
+    company_email = db.Column(db.String(255), nullable=True)
+
 
 class JobApplication(db.Model):
     __tablename__ = 'job_applications'
@@ -154,6 +147,7 @@ def login():
         if user and check_password_hash(user.password, password):
             session['username'] = user.username
             session['identify'] = user.identify
+            session['user_id'] = user.user_id
             if session['identify'] == 'JobSeeker':
                 return redirect(url_for('resume'))
             elif session['identify'] == 'HumanResource':
@@ -175,45 +169,38 @@ def postjobaction():
         email = request.form['email']
         job_title = request.form['job_title']
         job_location = request.form['job_location']
-        job_region = request.form['job_region']
         job_type = request.form['job_type']
         job_description = request.form.get('job_description')
+        salary_range = request.form.get('salary_range',None)
+        publish_date = request.form.get('publish_date')
+        status = request.form.get('status')
+        # 将 'status' 转换为布尔类型
+        if status is not None:
+            status = status.lower() in ['true', '1', 'yes', 'on']
+        else:
+            status = False  # 默认值可以根据需求设置
         company_name = request.form['company_name']
-        company_tagline = request.form.get('company_tagline')
-        company_description = request.form.get('company_description')
-        company_website = request.form.get('company_website')
-        company_website_fb = request.form.get('company_website_fb')
-        company_website_tw = request.form.get('company_website_tw')
-        company_website_li = request.form.get('company_website_li')
-        featured_image = request.files['featured_image'].filename
-        company_logo = request.files['company_logo'].filename
-
+        company_tagline = request.form.get('company_tagline',None)
+        company_description = request.form.get('company_description',None)
+        company_website = request.form.get('company_website',None)
+        company_email = request.form.get('company_email',None)
         new_job = Job(
-            job_id=str(1),
-            publisher_id=None,
+            publisher_id=session['user_id'],
             email=email,
             job_title=job_title,
             job_location=job_location,
-            job_region=job_region,
+            salary_range = salary_range,
+            publish_date=publish_date,
+            status  = status,
             job_type=job_type,
             job_description=job_description,
             company_name=company_name,
             company_tagline=company_tagline,
             company_description=company_description,
             company_website=company_website,
-            company_website_fb=company_website_fb,
-            company_website_tw=company_website_tw,
-            company_website_li=company_website_li,
-            featured_image=featured_image,
-            company_logo=company_logo,
-            description="1",
-            requirements="1",
-            salary_range="1",
-            location="1",
-            publish_date="03/01/01",
-            status=True
+            company_email=company_email,
         )
-        # i+=1
+
         db.session.add(new_job)
         db.session.commit()
         return render_template('post-job.html')
