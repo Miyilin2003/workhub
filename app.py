@@ -55,6 +55,21 @@ class Job(db.Model):
     __tablename__ = 'jobs'
     job_id = db.Column(db.String(255), primary_key=True)
     publisher_id = db.Column(db.String(255), db.ForeignKey('users.user_id'))
+    email = db.Column(db.String(255))
+    job_title = db.Column(db.String(255))
+    job_location = db.Column(db.String(255))
+    job_region = db.Column(db.String(255))
+    job_type = db.Column(db.Enum('Part Time', 'Full Time'))
+    job_description = db.Column(db.Text)
+    company_name = db.Column(db.String(255))
+    company_tagline = db.Column(db.String(255), nullable=True)
+    company_description = db.Column(db.Text, nullable=True)
+    company_website = db.Column(db.String(255), nullable=True)
+    company_website_fb = db.Column(db.String(255), nullable=True)
+    company_website_tw = db.Column(db.String(255), nullable=True)
+    company_website_li = db.Column(db.String(255), nullable=True)
+    featured_image = db.Column(db.String(255), nullable=True)
+    company_logo = db.Column(db.String(255), nullable=True)
     description = db.Column(db.Text)
     requirements = db.Column(db.Text)
     salary_range = db.Column(db.String(255))
@@ -151,6 +166,51 @@ def login():
 def postjob():
     return render_template('post-job.html')
 
+@app.route('/postjobaction', methods=['GET', 'POST'])
+def postjobaction():
+    if request.method == 'POST':
+        email = request.form['email']
+        job_title = request.form['job-title']
+        job_location = request.form['job-location']
+        job_region = request.form['job-region']
+        job_type = request.form['job-type']
+        job_description = request.form['job-description']
+        company_name = request.form['company-name']
+        company_tagline = request.form.get('company-tagline')
+        company_description = request.form.get('company-description')
+        company_website = request.form.get('company-website')
+        company_website_fb = request.form.get('company-website-fb')
+        company_website_tw = request.form.get('company-website-tw')
+        company_website_li = request.form.get('company-website-li')
+        featured_image = request.files['featured-image'].filename
+        company_logo = request.files['company-logo'].filename
+
+        new_job = Job(
+            email=email,
+            job_title=job_title,
+            job_location=job_location,
+            job_region=job_region,
+            job_type=job_type,
+            job_description=job_description,
+            company_name=company_name,
+            company_tagline=company_tagline,
+            company_description=company_description,
+            company_website=company_website,
+            company_website_fb=company_website_fb,
+            company_website_tw=company_website_tw,
+            company_website_li=company_website_li,
+            featured_image=featured_image,
+            company_logo=company_logo
+        )
+        session.add(new_job)
+        session.commit()
+        return render_template('post-job.html')
+
+    return render_template('post-job.html')
+
+@app.route('/job-posted')
+def job_posted():
+    return "Job successfully posted!"
 @app.route('/logout')
 def logout():
     session.pop('username', None)

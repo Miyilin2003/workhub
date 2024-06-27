@@ -4,7 +4,7 @@ from db import create_sql
 # MySQL连接参数
 host = 'localhost'
 user = 'root'
-password = '040428'
+password = '152668'
 database_name = 'jobseeking'
 
 # 创建数据库连接
