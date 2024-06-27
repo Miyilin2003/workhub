@@ -8,7 +8,7 @@ app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
 # 将040428改为自己的数据库密码，将jobseeking改为自己的数据库名
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:040428@localhost/jobseeking'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:152668@localhost/jobseeking'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -136,11 +136,20 @@ def login():
         if user and check_password_hash(user.password, password):
             session['username'] = user.username
             session['identify'] = user.identify
-            return redirect(url_for('home'))
+            if session['identify'] == 'JobSeeker':
+                return redirect(url_for('home'))
+            elif session['identify'] == 'HumanResource':
+                return redirect(url_for('postjob'))
+            elif session['identify'] == 'Admin':
+                return redirect(url_for('home'))
         else:
             return 'Invalid credentials'
 
     return render_template('login.html')
+
+@app.route('/postjob')
+def postjob():
+    return render_template('post-job.html')
 
 @app.route('/logout')
 def logout():
