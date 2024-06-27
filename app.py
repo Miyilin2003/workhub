@@ -8,7 +8,7 @@ app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
 # 将040428改为自己的数据库密码，将jobseeking改为自己的数据库名
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:152668@localhost/jobseeking'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:040428@localhost/jobseeker'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -166,26 +166,30 @@ def login():
 def postjob():
     return render_template('post-job.html')
 
+
+
 @app.route('/postjobaction', methods=['GET', 'POST'])
 def postjobaction():
     if request.method == 'POST':
         email = request.form['email']
-        job_title = request.form['job-title']
-        job_location = request.form['job-location']
-        job_region = request.form['job-region']
-        job_type = request.form['job-type']
-        job_description = request.form['job-description']
-        company_name = request.form['company-name']
-        company_tagline = request.form.get('company-tagline')
-        company_description = request.form.get('company-description')
-        company_website = request.form.get('company-website')
-        company_website_fb = request.form.get('company-website-fb')
-        company_website_tw = request.form.get('company-website-tw')
-        company_website_li = request.form.get('company-website-li')
-        featured_image = request.files['featured-image'].filename
-        company_logo = request.files['company-logo'].filename
+        job_title = request.form['job_title']
+        job_location = request.form['job_location']
+        job_region = request.form['job_region']
+        job_type = request.form['job_type']
+        job_description = request.form.get('job_description')
+        company_name = request.form['company_name']
+        company_tagline = request.form.get('company_tagline')
+        company_description = request.form.get('company_description')
+        company_website = request.form.get('company_website')
+        company_website_fb = request.form.get('company_website_fb')
+        company_website_tw = request.form.get('company_website_tw')
+        company_website_li = request.form.get('company_website_li')
+        featured_image = request.files['featured_image'].filename
+        company_logo = request.files['company_logo'].filename
 
         new_job = Job(
+            job_id=str(1),
+            publisher_id=None,
             email=email,
             job_title=job_title,
             job_location=job_location,
@@ -200,10 +204,17 @@ def postjobaction():
             company_website_tw=company_website_tw,
             company_website_li=company_website_li,
             featured_image=featured_image,
-            company_logo=company_logo
+            company_logo=company_logo,
+            description="1",
+            requirements="1",
+            salary_range="1",
+            location="1",
+            publish_date="03/01/01",
+            status=True
         )
-        session.add(new_job)
-        session.commit()
+        # i+=1
+        db.session.add(new_job)
+        db.session.commit()
         return render_template('post-job.html')
 
     return render_template('post-job.html')

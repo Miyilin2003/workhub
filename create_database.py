@@ -4,8 +4,8 @@ from db import create_sql
 # MySQL连接参数
 host = 'localhost'
 user = 'root'
-password = '152668'
-database_name = 'jobseeking'
+password = '040428'
+database_name = 'jobseeker'
 
 # 创建数据库连接
 connection = pymysql.connect(host=host, user=user, password=password)

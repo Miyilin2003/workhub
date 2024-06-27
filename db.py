@@ -36,7 +36,7 @@ class Resume:
 
 class Job:
     def __init__(self, job_id, publisher_id, email, job_title, job_location, job_region, job_type, job_description, company_name, company_tagline, company_description, company_website, company_website_fb, company_website_tw, company_website_li, featured_image, company_logo, description, requirements, salary_range, location, publish_date, status):
-        self.job_id = job_id
+        self.job_id = 123
         self.publisher_id = publisher_id
         self.email = email
         self.job_title = job_title
