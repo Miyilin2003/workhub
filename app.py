@@ -4,15 +4,18 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask.cli import with_appcontext
 import click
 import os
-
+import nlp
 import requests
-
+import time
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
+i=0
 app.config['UPLOAD_FOLDER'] = 'uploads/'
 # 将040428改为自己的数据库密码，将jobseeking改为自己的数据库名
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:040428@localhost/jobseeker'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+def transfer_time_into_str(time):
+    return str(time.tm_year) + str(time.tm_mon) + str(time.tm_mday) + str(time.tm_hour) + str(time.tm_min) + str(time.tm_sec)
 
 db = SQLAlchemy(app)
 
@@ -79,6 +82,7 @@ class Job(db.Model):
     location = db.Column(db.String(255))
     publish_date = db.Column(db.Date)
     status = db.Column(db.Boolean)
+    category = db.Column(db.String(255))   
 
 class JobApplication(db.Model):
     __tablename__ = 'job_applications'
@@ -171,54 +175,59 @@ def postjob():
 
 @app.route('/postjobaction', methods=['GET', 'POST'])
 def postjobaction():
-    if request.method == 'POST':
-        email = request.form['email']
-        job_title = request.form['job_title']
-        job_location = request.form['job_location']
-        job_region = request.form['job_region']
-        job_type = request.form['job_type']
-        job_description = request.form.get('job_description')
-        company_name = request.form['company_name']
-        company_tagline = request.form.get('company_tagline')
-        company_description = request.form.get('company_description')
-        company_website = request.form.get('company_website')
-        company_website_fb = request.form.get('company_website_fb')
-        company_website_tw = request.form.get('company_website_tw')
-        company_website_li = request.form.get('company_website_li')
-        featured_image = request.files['featured_image'].filename
-        company_logo = request.files['company_logo'].filename
-
-        new_job = Job(
-            job_id=str(1),
-            publisher_id=None,
-            email=email,
-            job_title=job_title,
-            job_location=job_location,
-            job_region=job_region,
-            job_type=job_type,
-            job_description=job_description,
-            company_name=company_name,
-            company_tagline=company_tagline,
-            company_description=company_description,
-            company_website=company_website,
-            company_website_fb=company_website_fb,
-            company_website_tw=company_website_tw,
-            company_website_li=company_website_li,
-            featured_image=featured_image,
-            company_logo=company_logo,
-            description="1",
-            requirements="1",
-            salary_range="1",
-            location="1",
-            publish_date="03/01/01",
-            status=True
-        )
-        # i+=1
-        db.session.add(new_job)
-        db.session.commit()
-        return render_template('post-job.html')
-
+    # if request.method == 'POST':
+    email = request.form['email']
+    job_title = request.form['job_title']
+    job_location = request.form['job_location']
+    job_region = request.form['job_region']
+    job_type = request.form['job_type']
+    job_description = request.form['job_description']
+    company_name = request.form['company_name']
+    company_tagline = request.form.get('company_tagline')
+    company_description = request.form.get('company_description')
+    company_website = request.form.get('company_website')
+    company_website_fb = request.form.get('company_website_fb')
+    company_website_tw = request.form.get('company_website_tw')
+    company_website_li = request.form.get('company_website_li')
+    featured_image = request.files['featured_image'].filename
+    company_logo = request.files['company_logo'].filename
+    # return f"Job Description: {job_description} <br> Company Description: {company_description}"
+    print(job_description)
+    
+    # 获取当前时间
+    time1 = transfer_time_into_str(time.localtime())
+    new_job = Job(
+        job_id=time1,
+        publisher_id=None,
+        email=email,
+        job_title=job_title,
+        job_location=job_location,
+        job_region=job_region,
+        job_type=job_type,
+        job_description=job_description,
+        company_name=company_name,
+        company_tagline=company_tagline,
+        company_description=company_description,
+        company_website=company_website,
+        company_website_fb=company_website_fb,
+        company_website_tw=company_website_tw,
+        company_website_li=company_website_li,
+        featured_image=featured_image,
+        company_logo=company_logo,
+        description="1",
+        requirements="1",
+        salary_range="1",
+        location="1",
+        publish_date="03/01/01",
+        status=True,
+        category=nlp.predict(job_description)
+    )
+    # i+=1
+    db.session.add(new_job)
+    db.session.commit()
     return render_template('post-job.html')
+
+    # return render_template('post-job.html')
 
 @app.route('/resume')
 def resume():
@@ -274,4 +283,5 @@ def logout():
     return redirect(url_for('home'))
 
 if __name__ == '__main__':
+    i=0
     app.run(debug=True)

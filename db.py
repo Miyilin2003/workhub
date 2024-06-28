@@ -59,6 +59,7 @@ class Job:
         self.location = location
         self.publish_date = publish_date
         self.status = status
+        self.category = 0
 
 
 class JobApplication:
@@ -153,7 +154,8 @@ create_sql=[
         location VARCHAR(255),
         publish_date DATE,
         status BOOLEAN,
-        FOREIGN KEY (publisher_id) REFERENCES users(user_id)
+        FOREIGN KEY (publisher_id) REFERENCES users(user_id),
+        category VARCHAR(255)
     );
     """,
         """

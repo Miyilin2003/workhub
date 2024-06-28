@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>JobBoard &mdash; Website Template by Colorlib</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="static/css/quill.snow.css">
+</head>
+<body>
+
+<form action="{{ url_for('postjobaction') }}" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="job-description">Job Description</label>
+        <input type="hidden" id="job-description" name="job_description">
+        <div class="editor" id="editor-1">
+            <p>Write Job Description!</p>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="company-description">Company Description (Optional)</label>
+        <input type="hidden" id="company-description" name="company_description">
+        <div class="editor" id="editor-2">
+            <p>Description</p>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" class="btn btn-primary btn-md" value="Submit Job">
+    </div>
+</form>
+
+<script src="static/js/quill.min.js"></script>
+<script>
+    var quill1 = new Quill('#editor-1', {
+        theme: 'snow'
+    });
+    var quill2 = new Quill('#editor-2', {
+        theme: 'snow'
+    });
+
+    document.querySelector('form').onsubmit = function() {
+        document.querySelector('input[name=job_description]').value = quill1.root.innerHTML;
+        //document.querySelector('input[name=company_description]').value = quill2.root.innerHTML;
+    };
+</script>
+</body>
+</html>
