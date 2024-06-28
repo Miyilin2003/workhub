@@ -168,5 +168,16 @@ create_sql=[
             interview_format VARCHAR(255),
             FOREIGN KEY (candidate_id) REFERENCES users(user_id)
         );
+        """,
+        """
+        CREATE TABLE IF NOT EXISTS messages (
+            id SERIAL PRIMARY KEY,
+            sender_id VARCHAR(255) NOT NULL,
+            receiver_id VARCHAR(255) NOT NULL,
+            context TEXT NOT NULL,
+            timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (sender_id) REFERENCES users(user_id),
+            FOREIGN KEY (receiver_id) REFERENCES users(user_id)
+        );
         """
     ]

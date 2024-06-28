@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>JobBoard &mdash; Website Template by Colorlib</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="static/css/custom-bs.css">
+    <link rel="stylesheet" href="static/css/jquery.fancybox.min.css">
+    <link rel="stylesheet" href="static/css/bootstrap-select.min.css">
+    <link rel="stylesheet" href="static/fonts/icomoon/style.css">
+    <link rel="stylesheet" href="static/fonts/line-icons/style.css">
+    <link rel="stylesheet" href="static/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="static/css/animate.min.css">
+    <link rel="stylesheet" href="static/css/quill.snow.css">
+    <link rel="stylesheet" href="static/css/style.css">
+</head>
+<body id="top">
+
+<div id="overlayer"></div>
+<div class="loader">
+    <div class="spinner-border text-primary" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+
+<div class="site-wrap">
+
+    <div class="site-mobile-menu site-navbar-target">
+        <div class="site-mobile-menu-header">
+            <div class="site-mobile-menu-close mt-3">
+                <span class="icon-close2 js-menu-toggle"></span>
+            </div>
+        </div>
+        <div class="site-mobile-menu-body"></div>
+    </div> <!-- .site-mobile-menu -->
+    <header class="site-navbar mt-3">
+        <div class="container-fluid">
+          <div class="row align-items-center">
+            <div class="site-logo col-6"><a href="index.html">JobBoard</a></div>
+
+            <nav class="mx-auto site-navigation">
+              <ul class="site-menu js-clone-nav d-none d-xl-block ml-0 pl-0">
+                <li><a href="jshome" >Home</a></li>
+                <li><a href="js_joblist" >Job</a></li>
+                <li><a href="jsresumelist" class="nav-link active">Resume</a></li>
+                <li><a href="js_message">Messages</a></li>
+                <li class="d-lg-none"><a href="/login" methods=['GET']>Log In</a></li>
+              </ul>
+            </nav>
+
+            <div class="right-cta-menu text-right d-flex align-items-center col-6">
+              <div class="ml-auto">
+                <a href="/login" methods=['GET'] class="btn btn-primary border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-lock_outline"></span>Log In</a>
+              </div>
+              <a href="#" class="site-menu-toggle js-menu-toggle d-inline-block d-xl-none mt-lg-2 ml-3"><span class="icon-menu h3 m-0 p-0 mt-2"></span></a>
+            </div>
+
+          </div>
+        </div>
+      </header>
+    <!-- HOME -->
+    <section class="section-hero overlay inner-page bg-image" style="background-image: url('static/images/hero_1.jpg');" id="home-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="custom-breadcrumbs">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="site-section">
+        <div class="container">
+            <div class="row align-items-center mb-5">
+                <div class="col-lg-8 mb-4 mb-lg-0">
+                    <div class="d-flex align-items-center">
+                        <div>
+                            <h2>Job Seeker Page</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- This is the specific content of the job seeker page -->
+            <div class="row mb-5">
+                <div class="col-lg-12">
+                    <!-- You can add other content of the job seeker page here -->
+
+                    <!-- Upload Resume Form -->
+                    <h2>Upload Resume</h2>
+                    <form action="{{ url_for('upload_resume') }}" method="post" enctype="multipart/form-data">
+                        <label for="user_id">User ID:</label>
+                        <input type="text" id="user_id" name="user_id" required><br><br>
+
+                        <label for="education_background">Education Background:</label>
+                        <textarea id="education_background" name="education_background" rows="4" cols="50" required></textarea><br><br>
+
+                        <label for="work_experience">Work Experience:</label>
+                        <textarea id="work_experience" name="work_experience" rows="4" cols="50" required></textarea><br><br>
+
+                        <label for="skills_and_certificates">Skills and Certificates:</label>
+                        <textarea id="skills_and_certificates" name="skills_and_certificates" rows="4" cols="50" required></textarea><br><br>
+
+                        <label for="career_objective">Career Objective:</label>
+                        <textarea id="career_objective" name="career_objective" rows="4" cols="50" required></textarea><br><br>
+
+                        <label for="resume_pdf">Upload Resume PDF:</label>
+                        <input type="file" id="resume_pdf" name="resume_pdf" accept=".pdf" required><br><br>
+
+                        <input type="submit" value="Upload Resume">
+                    </form>
+
+                    <script>
+                        function generateResumeLink() {
+                            const userId = document.getElementById('user_id').value;
+                            if (userId) {
+                                const resumeLink = `https://visiky.github.io/resume/?mode=edit&template=template1&user=${userId}`;
+                                window.open(resumeLink, '_blank');
+                            } else {
+                                alert("Please enter User ID to generate resume link.");
+                            }
+                        }
+                    </script>
+
+                    <button onclick="generateResumeLink()">Generate Resume</button>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- SCRIPTS -->
+
+<script src="static/js/jquery.min.js"></script>
+<script src="static/js/bootstrap.bundle.min.js"></script>
+<script src="static/js/isotope.pkgd.min.js"></script>
+<script src="static/js/stickyfill.min.js"></script>
+<script src="static/js/jquery.fancybox.min.js"></script>
+<script src="static/js/jquery.easing.1.3.js"></script>
+<script src="static/js/jquery.waypoints.min.js"></script>
+<script src="static/js/jquery.animateNumber.min.js"></script>
+<script src="static/js/owl.carousel.min.js"></script>
+<script src="static/js/quill.min.js"></script>
+<script src="static/js/bootstrap-select.min.js"></script>
+<script src="static/js/custom.js"></script>
+</body>
+</html>
