@@ -1,6 +1,6 @@
 from operator import or_
 
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, g
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -18,7 +18,7 @@ admin = Admin(app, name='My Admin', template_mode='bootstrap3')
 app.secret_key = 'your_secret_key'
 app.config['UPLOAD_FOLDER'] = 'uploads/'
 # 将040428改为自己的数据库密码，将jobseeker改为自己的数据库名
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:zhujingbo030420@localhost/jobseeker'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:040428@localhost/jobseeker'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 resume_id = 0
 job_id = 0
@@ -197,6 +197,7 @@ def register():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    session['rc'] = -1
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -239,18 +240,36 @@ def hr_home():
 
 @app.route('/js_joblist')
 def js_joblist():
+    print(session['rc'])
     jobs = Job.query.order_by(desc(Job.publish_date)).all()
     job_list = []
-    for job in jobs:
-        job_info = {
-            'id': job.job_id,
-            'job_title': job.job_title,
-            'job_location': job.job_location,
-            'job_type': job.job_type,
-            'company_name': job.company_name,
-        }
-        job_list.append(job_info)
-    # print(job_list)
+    if session['rc'] == -1:
+        for job in jobs:
+            job_info = {
+                'id': job.job_id,
+                'job_title': job.job_title,
+                'job_location': job.job_location,
+                'job_type': job.job_type,
+                'company_name': job.company_name,
+            }
+            job_list.append(job_info)
+    else:
+        for job in jobs:
+            job_info = {
+                'id': job.job_id,
+                'job_title': job.job_title,
+                'job_location': job.job_location,
+                'job_type': job.job_type,
+                'company_name': job.company_name,
+            }
+            print(job.category)
+            if session['rc'] == int(job.category):
+                print("==")
+                job_list.insert(0,job_info)
+            else:
+                job_list.append(job_info)
+    print(job_list)
+    
 
     return render_template('js_joblist.html', jobs=job_list)
 
@@ -363,7 +382,7 @@ def js_chooseresumes(job_id):
             'career_objective': resume.career_objective
         }
         resume_list.append(resume_info)
-    print(resume_list)
+
     return render_template('js_resumelist1.html', resumes=resume_list,job_id = job_id)
 @app.route('/js_sendresumes_<job_id>_<resume_id>')
 def js_sendresumes( job_id,resume_id):
@@ -402,8 +421,10 @@ def jsresumelist():
             'skills_and_certificates': resume.skills_and_certificates,
             'career_objective': resume.career_objective
         }
+        s = str(resume.career_objective)
         resume_list.append(resume_info)
-    print(resume_list)
+    p = nlp.predict(s)
+    session['rc']=int(p)
     return render_template('js_resumelist.html', resumes=resume_list)
 
 @app.route('/js_resumedetails_<resume_id>')
@@ -733,6 +754,7 @@ def resume():
 @app.route('/upload_resume', methods=['GET', 'POST'])
 def upload_resume():
     global resume_id
+    global resume_category
     if request.method == 'POST':
         resume_id += 1
         user_id = request.form['user_id']
@@ -741,7 +763,8 @@ def upload_resume():
         skills_and_certificates = request.form['skills_and_certificates']
         career_objective = request.form['career_objective']
         resume_pdf = request.files['resume_pdf']
-
+        session['rc'] = nlp.predict(career_objective)
+        print("resume_category:",session['rc'])
         if resume_pdf and resume_pdf.filename.endswith('.pdf'):
             # filename = secure_filename(resume_pdf.filename)
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], resume_pdf.filename)
@@ -759,11 +782,12 @@ def upload_resume():
                 work_experience=work_experience,
                 skills_and_certificates=skills_and_certificates,
                 personal_profile=personal_profile,
-                career_objective=career_objective
+                career_objective=career_objective,
             )
             db.session.add(new_resume)
             db.session.commit()
-
+            
+            
             return redirect(url_for('resume_success'))
 
     return render_template('upload_resume.html')
