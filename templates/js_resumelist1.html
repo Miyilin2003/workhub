@@ -13,7 +13,30 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/animate.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/quill.snow.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .niceButton3 {
+            background-color: #1795bb;
+            border-radius: 12px;
+            border: none;
+            color: white;
+            padding: 16px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            -webkit-transition-duration: 0.4s;
+            transition-duration: 0.4s;
+            cursor: pointer;
+          }
+          .niceButton3:hover {
+            background-color: #fff;
+            color: #1795bb;
+            border: 1px solid #ccc;
+          }
     
+    
+        </style>
 </head>
 <body id="top">
 
@@ -86,6 +109,9 @@
 
                             <a href="{{ url_for('js_resumedetails',resume_id=resume.resume_id) }}">View Details</a>
                         </div>
+                        <button class="niceButton3">
+                            <a href="{{ url_for('js_sendresumes',job_id=job_id,resume_id=resume.resume_id) }}">投递简历</a>
+                        </button>
                     </div>
                 {% endfor %}
             </div>

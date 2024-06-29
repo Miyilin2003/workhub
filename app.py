@@ -6,6 +6,7 @@ from sqlalchemy import desc
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask.cli import with_appcontext
 import click
+from datetime import datetime
 import os
 from flask_admin import Admin
 import requests
@@ -19,6 +20,8 @@ app.config['UPLOAD_FOLDER'] = 'uploads/'
 # 将040428改为自己的数据库密码，将jobseeker改为自己的数据库名
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:152668@localhost/jobseeker'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+resume_id = 0
+job_id = 0
 
 db = SQLAlchemy(app)
 def transfer_time_into_str(time):
@@ -64,7 +67,7 @@ class Resume(db.Model):
 
 class Job(db.Model):
     __tablename__ = 'jobs'
-    job_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    job_id = db.Column(db.String(255), primary_key=True)
     publisher_id = db.Column(db.String(255), db.ForeignKey('users.user_id'))
     email = db.Column(db.String(255))
     job_title = db.Column(db.String(255))
@@ -248,6 +251,45 @@ def js_joblist():
     # print(job_list)
 
     return render_template('js_joblist.html', jobs=job_list)
+@app.route('/js_chooseresumes_<job_id>')
+def js_chooseresumes(job_id):
+    user_id = session['user_id']
+    if user_id is None:
+        return "User not logged in", 401
+
+    # 查询简历信息，按ID排序
+    resumes = Resume.query.filter_by(user_id=user_id).order_by(Resume.resume_id.desc()).all()
+    resume_list = []
+    for resume in resumes:
+        resume_info = {
+            'resume_id': resume.resume_id,
+            'education_background': resume.education_background,
+            'work_experience': resume.work_experience,
+            'skills_and_certificates': resume.skills_and_certificates,
+            'career_objective': resume.career_objective
+        }
+        resume_list.append(resume_info)
+    print(resume_list)
+    return render_template('js_resumelist1.html', resumes=resume_list,job_id = job_id)
+@app.route('/js_sendresumes_<job_id>_<resume_id>')
+def js_sendresumes( job_id,resume_id):
+    application_id = resume_id
+    user_id = session['user_id']
+    status = True
+    # 获取当前时间并格式化为 xxxx/xx/xx
+    application_date = datetime.now().strftime('%Y/%m/%d')
+    if user_id is None:
+        return "User not logged in", 401
+    new_application = JobApplication(
+        application_id=application_id,
+        job_seeker_id=user_id,
+        position_id=job_id,
+        status=status,
+        application_date=application_date
+        )
+    db.session.add(new_application)
+    db.session.commit()
+    return render_template('js_sendresumesuccess.html')
 
 @app.route('/jsresumelist')
 def jsresumelist():
@@ -303,6 +345,31 @@ def hr_joblist():
     # print(job_list)
 
     return render_template('hr_joblist.html',jobs=job_list)
+
+@app.route('/hr_resumelist_<job_id>')
+def hr_resumelist(job_id):
+    # 第一步：查询 JobApplication 表
+    applications = JobApplication.query.filter_by(position_id=job_id).order_by(JobApplication.job_seeker_id.desc()).all()
+    application_ids = [a.application_id for a in applications]
+    
+    # 第二步：查询 Resume 表
+
+    # 查询简历信息，按ID排序
+    resumes = Resume.query.filter(Resume.resume_id.in_(application_ids)).order_by(Resume.resume_id.desc()).all()
+
+    resume_list = []
+    for resume in resumes:
+        resume_info = {
+            'resume_id': resume.resume_id,
+            'education_background': resume.education_background,
+            'work_experience': resume.work_experience,
+            'skills_and_certificates': resume.skills_and_certificates,
+            'career_objective': resume.career_objective
+        }
+        resume_list.append(resume_info)
+    print(resume_list)
+    return render_template('hr_resumelist.html', resumes=resume_list)
+
 
 @app.route('/hr_jobdetails_<job_id>')
 def hr_jobdetails(job_id):
@@ -466,6 +533,8 @@ def postjob():
 
 @app.route('/postjobaction', methods=['GET', 'POST'])
 def postjobaction():
+    global job_id
+    job_id += 1
     if request.method == 'POST':
         email = request.form['email']
         job_title = request.form['job_title']
@@ -486,6 +555,7 @@ def postjobaction():
         company_website = request.form.get('company_website',None)
         company_email = request.form.get('company_email',None)
         new_job = Job(
+            job_id=job_id,
             publisher_id=session['user_id'],
             email=email,
             job_title=job_title,
@@ -562,7 +632,9 @@ def resume():
 
 @app.route('/upload_resume', methods=['GET', 'POST'])
 def upload_resume():
+    global resume_id
     if request.method == 'POST':
+        resume_id += 1
         user_id = request.form['user_id']
         education_background = request.form['education_background']
         work_experience = request.form['work_experience']
@@ -581,7 +653,7 @@ def upload_resume():
 
                 # Save to database (example, adjust as needed)
             new_resume = Resume(
-                resume_id=int(user_id),
+                resume_id=resume_id,
                 user_id=user_id,
                 education_background=education_background,
                 work_experience=work_experience,
@@ -596,11 +668,10 @@ def upload_resume():
 
     return render_template('upload_resume.html')
 
-@app.route('/resume_success')
 
 @app.route('/resume_success')
 def resume_success():
-    return "Resume uploaded and profile generated successfully!"
+    return render_template('resume_uploaded_successful.html')
 
 @app.route('/job-posted')
 def job_posted():

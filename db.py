@@ -131,7 +131,7 @@ create_sql=[
         """,
     """
     CREATE TABLE IF NOT EXISTS jobs (
-        job_id INT AUTO_INCREMENT PRIMARY KEY,
+        job_id VARCHAR(255) PRIMARY KEY,
         publisher_id VARCHAR(255),
         email VARCHAR(255),
         job_title VARCHAR(255),
@@ -157,7 +157,8 @@ create_sql=[
             position_id VARCHAR(255),
             status VARCHAR(255),
             application_date DATE,
-            FOREIGN KEY (job_seeker_id) REFERENCES users(user_id)
+            FOREIGN KEY (job_seeker_id) REFERENCES users(user_id),
+            FOREIGN KEY (position_id) REFERENCES jobs(job_id)
         );
         """,
         """
@@ -167,6 +168,7 @@ create_sql=[
             candidate_id VARCHAR(255),
             interview_time DATETIME,
             interview_format VARCHAR(255),
+            FOREIGN KEY (position_id) REFERENCES jobs(job_id),
             FOREIGN KEY (candidate_id) REFERENCES users(user_id)
         );
         """,
