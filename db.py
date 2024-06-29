@@ -59,6 +59,7 @@ class Job:
         self.location = location
         self.publish_date = publish_date
         self.status = status
+        self.category = "1"
 
 
 class JobApplication:
@@ -145,7 +146,7 @@ create_sql=[
         company_description TEXT NULL,
         company_website VARCHAR(255) NULL,
         company_email VARCHAR(255) NULL,
-
+        category VARCHAR(255),
         FOREIGN KEY (publisher_id) REFERENCES users(user_id)
     );
     """,
