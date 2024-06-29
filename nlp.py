@@ -223,7 +223,7 @@ def main():
 
         rnn_model = RNN_ATTs(len(vocab.vocab), args.embed_size, args.hidden_size,
                         len(label_map), n_layers=1, bidirectional=True, dropout=args.dropout_rate)
-        rnn_model.load_state_dict(torch.load('classifa-best-RNN.th'))
+        rnn_model.load_state_dict(torch.load('classifa-best-RNN.th',map_location=torch.device('cpu')))
         rnn_model.to(device)
         rnn_test_loss, rnn_result = evaluate(args, cirtion, rnn_model, test_data, vocab)
         with open(args.output_file, "a") as fout:
@@ -243,7 +243,7 @@ def predict(text):
     label_map = vocab.labels
     model = RNN_ATTs(len(vocab.vocab), 300, 256,
                      len(label_map), n_layers=1, bidirectional=True, dropout=args.dropout_rate)
-    model.load_state_dict(torch.load('model.th'))
+    model.load_state_dict(torch.load('model.th', map_location=torch.device('cpu')))
     model.to(device)
     model.eval()
 
@@ -289,7 +289,7 @@ if __name__ == '__main__':
     label_map = vocab.labels
     rnn_model = RNN_ATTs(len(vocab.vocab), 300, 256,
                          len(label_map), n_layers=1, bidirectional=True, dropout=args.dropout_rate)
-    rnn_model.load_state_dict(torch.load('model.th'))
+    rnn_model.load_state_dict(torch.load('model.th', map_location=torch.device('cpu')))
     rnn_model.to(device)
     text = "1. 数学、计算机、金融工程、物理等理工科专业，本科或以上学历2. 有python开发经验、熟悉至少一款数据库软件(如MySQL)优先3. 熟悉常用的版本控制软件，如 Git4. 对数据结构与算法有深刻理解，具有良好的编程习惯，思维严谨5. 良好的沟通能力、团队合作精神和高度的责任感6. 能够每周全职工作3天以上并持续至少3个月7.日薪资根据能力150元~250元一天不等"
     # predict(text, rnn_model, vocab, args)

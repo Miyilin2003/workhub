@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title>JobBoard &mdash; Website Template by Colorlib</title>
+    <title>Resume Details &mdash; JobBoard</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="static/css/custom-bs.css">
@@ -25,7 +25,7 @@
 
 <div class="site-wrap">
 
-    <div class="site-mobile-menu site-navbar-target">
+   <div class="site-mobile-menu site-navbar-target">
         <div class="site-mobile-menu-header">
             <div class="site-mobile-menu-close mt-3">
                 <span class="icon-close2 js-menu-toggle"></span>
@@ -40,20 +40,16 @@
 
             <nav class="mx-auto site-navigation">
               <ul class="site-menu js-clone-nav d-none d-xl-block ml-0 pl-0">
-                <li><a href="hr_home" class="nav-link active">Home</a></li>
+                <li><a href="hr_home" >Home</a></li>
                 <li><a href="hr_joblist">Job</a></li>
-                  <li><a href="hr_message">Messages</a></li>
+                  <li><a href="hr_message" class="nav-link active">Messages</a></li>
                   <li><a href="/hrinterviewlist">Interview</a></li>
-{#                <li><a href="contact.html">Contact</a></li>#}
-
-                  <li class="d-lg-none"><a href="post-job.html"><span class="mr-2">+</span> Post a Job</a></li>
                 <li class="d-lg-none"><a href="/login" methods=['GET']>Log In</a></li>
               </ul>
             </nav>
 
             <div class="right-cta-menu text-right d-flex aligin-items-center col-6">
               <div class="ml-auto">
-                <a href="postjob" class="btn btn-outline-white border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-add"></span>Post a Job</a>
                 <a href="/logout" methods=['GET'] class="btn btn-primary border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-lock_outline"></span>Log Out</a>
               </div>
               <a href="#" class="site-menu-toggle js-menu-toggle d-inline-block d-xl-none mt-lg-2 ml-3"><span class="icon-menu h3 m-0 p-0 mt-2"></span></a>
@@ -67,19 +63,51 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-7">
-{#                    <h1 class="text-white font-weight-bold">HR HOME</h1>#}
+                    <h1 class="text-white font-weight-bold">Resume Details</h1>
                     <div class="custom-breadcrumbs">
-{#                        <a href="#">Home</a> <span class="mx-2 slash">/</span>#}
-{#                        <span class="text-white"><strong>Home</strong></span>#}
-{#                        <a href="#">Job</a> <span class="mx-2 slash">/</span>#}
-{#                        <span class="text-white"><strong>Post a Job</strong></span>#}
+                        <a href="hrhome">Home</a> <span class="mx-2 slash">/</span>
+                        <span class="text-white"><strong>Resume Details</strong></span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
+    <section class="site-section">
+        <div class="container">
+            <!-- 表单具体内容 -->
+            <div class="row mb-5">
+                <div class="col-lg-12">
+                    <form id="resume-form" class="p-4 p-md-5 border rounded" action="{{ url_for('change_resume', resume_id=resume_id) }}" method="post" enctype="multipart/form-data">
+                        <h3 class="text-black mb-5 border-bottom pb-2">Resume Details</h3>
 
+                        <div class="form-group">
+                            <label for="user_id">User ID</label>
+                            <input type="text" class="form-control" id="user_id" name="user_id" value="{{ resume.user_id }}" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="education_background">Education Background</label>
+                            <textarea class="form-control" id="education_background" name="education_background" rows="4" >{{ resume.education_background }}</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="work_experience">Work Experience</label>
+                            <textarea class="form-control" id="work_experience" name="work_experience" rows="4" >{{ resume.work_experience }}</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="skills_and_certificates">Skills and Certificates</label>
+                            <textarea class="form-control" id="skills_and_certificates" name="skills_and_certificates" rows="4" >{{ resume.skills_and_certificates }}</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="career_objective">Career Objective</label>
+                            <textarea class="form-control" id="career_objective" name="career_objective" rows="4" >{{ resume.career_objective }}</textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-primary btn-md" value="Update Resume">
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </section>
 </div>

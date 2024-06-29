@@ -81,54 +81,54 @@ class Interview:
 
 
 #创建mqsql的表语句
-create_sql=[
-        """
-        CREATE TABLE IF NOT EXISTS users (
-            user_id VARCHAR(255) PRIMARY KEY,
-            name VARCHAR(255) NOT NULL,
-            phone VARCHAR(15),
-            email VARCHAR(255),
-            username VARCHAR(255) UNIQUE,
-            password VARCHAR(255),
-            security_question TEXT,
-            email_verification_status BOOLEAN,
-            phone_verification_status BOOLEAN,
-            identify VARCHAR(255)
-        );
-        """,
-        """
-        CREATE TABLE IF NOT EXISTS job_seekers (
-            user_id VARCHAR(255) PRIMARY KEY,
-            name VARCHAR(255) NOT NULL,
-            FOREIGN KEY (user_id) REFERENCES users(user_id)
-        );
-        """,
-        """
-        CREATE TABLE IF NOT EXISTS human_resources (
-            user_id VARCHAR(255) PRIMARY KEY,
-            name VARCHAR(255) NOT NULL,
-            FOREIGN KEY (user_id) REFERENCES users(user_id)
-        );
-        """,
-        """
-        CREATE TABLE IF NOT EXISTS admins (
-            user_id VARCHAR(255) PRIMARY KEY,
-            name VARCHAR(255) NOT NULL,
-            FOREIGN KEY (user_id) REFERENCES users(user_id)
-        );
-        """,
-        """
-        CREATE TABLE IF NOT EXISTS resumes (
-            resume_id VARCHAR(255) PRIMARY KEY,
-            user_id VARCHAR(255),
-            education_background TEXT,
-            work_experience TEXT,
-            skills_and_certificates TEXT,
-            personal_profile TEXT,
-            career_objective TEXT,
-            FOREIGN KEY (user_id) REFERENCES users(user_id)
-        );
-        """,
+create_sql = [
+    """
+    CREATE TABLE IF NOT EXISTS users (
+        user_id VARCHAR(255) PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        phone VARCHAR(15),
+        email VARCHAR(255),
+        username VARCHAR(255) UNIQUE,
+        password VARCHAR(255),
+        security_question TEXT,
+        email_verification_status BOOLEAN,
+        phone_verification_status BOOLEAN,
+        identify VARCHAR(255)
+    );
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS job_seekers (
+        user_id VARCHAR(255) PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        FOREIGN KEY (user_id) REFERENCES users(user_id)
+    );
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS human_resources (
+        user_id VARCHAR(255) PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        FOREIGN KEY (user_id) REFERENCES users(user_id)
+    );
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS admins (
+        user_id VARCHAR(255) PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        FOREIGN KEY (user_id) REFERENCES users(user_id)
+    );
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS resumes (
+        resume_id VARCHAR(255) PRIMARY KEY,
+        user_id VARCHAR(255),
+        education_background TEXT,
+        work_experience TEXT,
+        skills_and_certificates TEXT,
+        personal_profile TEXT,
+        career_objective TEXT,
+        FOREIGN KEY (user_id) REFERENCES users(user_id)
+    );
+    """,
     """
     CREATE TABLE IF NOT EXISTS jobs (
         job_id VARCHAR(255) PRIMARY KEY,
@@ -150,37 +150,42 @@ create_sql=[
         FOREIGN KEY (publisher_id) REFERENCES users(user_id)
     );
     """,
-        """
-        CREATE TABLE IF NOT EXISTS job_applications (
-            application_id VARCHAR(255) PRIMARY KEY,
-            job_seeker_id VARCHAR(255),
-            position_id VARCHAR(255),
-            status VARCHAR(255),
-            application_date DATE,
-            FOREIGN KEY (job_seeker_id) REFERENCES users(user_id),
-            FOREIGN KEY (position_id) REFERENCES jobs(job_id)
-        );
-        """,
-        """
-        CREATE TABLE IF NOT EXISTS interviews (
-            interview_id VARCHAR(255) PRIMARY KEY,
-            position_id VARCHAR(255),
-            candidate_id VARCHAR(255),
-            interview_time DATETIME,
-            interview_format VARCHAR(255),
-            FOREIGN KEY (position_id) REFERENCES jobs(job_id),
-            FOREIGN KEY (candidate_id) REFERENCES users(user_id)
-        );
-        """,
-        """
-        CREATE TABLE IF NOT EXISTS messages (
-            id SERIAL PRIMARY KEY,
-            sender_id VARCHAR(255) NOT NULL,
-            receiver_id VARCHAR(255) NOT NULL,
-            context TEXT NOT NULL,
-            timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (sender_id) REFERENCES users(user_id),
-            FOREIGN KEY (receiver_id) REFERENCES users(user_id)
-        );
-        """
-    ]
+    """
+    CREATE TABLE IF NOT EXISTS job_applications (
+        application_id VARCHAR(255) PRIMARY KEY,
+        job_seeker_id VARCHAR(255),
+        position_id VARCHAR(255),
+        status VARCHAR(255),
+        application_date DATE,
+        FOREIGN KEY (job_seeker_id) REFERENCES users(user_id),
+        FOREIGN KEY (position_id) REFERENCES jobs(job_id)
+    );
+    """,
+    """
+    DROP TABLE IF EXISTS interviews;
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS interviews (
+        interview_id INT AUTO_INCREMENT PRIMARY KEY,
+        position_id VARCHAR(255),
+        candidate_id VARCHAR(255),
+        interview_time DATETIME,
+        interview_format VARCHAR(255),
+        sender_id VARCHAR(255) NOT NULL,
+        receiver_id VARCHAR(255) NOT NULL,
+        FOREIGN KEY (candidate_id) REFERENCES users(user_id)
+    );
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS messages (
+        id SERIAL PRIMARY KEY,
+        sender_id VARCHAR(255) NOT NULL,
+        receiver_id VARCHAR(255) NOT NULL,
+        context TEXT NOT NULL,
+        timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (sender_id) REFERENCES users(user_id),
+        FOREIGN KEY (receiver_id) REFERENCES users(user_id)
+    );
+    """
+]
+

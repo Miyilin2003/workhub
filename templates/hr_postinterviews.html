@@ -25,7 +25,7 @@
 
 <div class="site-wrap">
 
-    <div class="site-mobile-menu site-navbar-target">
+   <div class="site-mobile-menu site-navbar-target">
         <div class="site-mobile-menu-header">
             <div class="site-mobile-menu-close mt-3">
                 <span class="icon-close2 js-menu-toggle"></span>
@@ -43,18 +43,15 @@
                 <li><a href="hr_home" class="nav-link active">Home</a></li>
                 <li><a href="hr_joblist">Job</a></li>
                   <li><a href="hr_message">Messages</a></li>
+                  <li><a href="tohr_postinterviews">PostInterviews</a></li>
                   <li><a href="/hrinterviewlist">Interview</a></li>
-{#                <li><a href="contact.html">Contact</a></li>#}
-
-                  <li class="d-lg-none"><a href="post-job.html"><span class="mr-2">+</span> Post a Job</a></li>
                 <li class="d-lg-none"><a href="/login" methods=['GET']>Log In</a></li>
               </ul>
             </nav>
 
-            <div class="right-cta-menu text-right d-flex aligin-items-center col-6">
+            <div class="right-cta-menu text-right d-flex align-items-center col-6">
               <div class="ml-auto">
-                <a href="postjob" class="btn btn-outline-white border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-add"></span>Post a Job</a>
-                <a href="/logout" methods=['GET'] class="btn btn-primary border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-lock_outline"></span>Log Out</a>
+                <a href="/login" methods=['GET'] class="btn btn-primary border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-lock_outline"></span>Log In</a>
               </div>
               <a href="#" class="site-menu-toggle js-menu-toggle d-inline-block d-xl-none mt-lg-2 ml-3"><span class="icon-menu h3 m-0 p-0 mt-2"></span></a>
             </div>
@@ -67,19 +64,62 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-7">
-{#                    <h1 class="text-white font-weight-bold">HR HOME</h1>#}
+                    <h1 class="text-white font-weight-bold">Post An Interview</h1>
                     <div class="custom-breadcrumbs">
-{#                        <a href="#">Home</a> <span class="mx-2 slash">/</span>#}
-{#                        <span class="text-white"><strong>Home</strong></span>#}
-{#                        <a href="#">Job</a> <span class="mx-2 slash">/</span>#}
-{#                        <span class="text-white"><strong>Post a Job</strong></span>#}
+                        <a href="hr_home">Home</a> <span class="mx-2 slash">/</span>
+                        <a href="hr_interviewlist">Interviews</a> <span class="mx-2 slash">/</span>
+                        <span class="text-white"><strong>Post an Interview</strong></span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
+    <section class="site-section">
+        <div class="container">
+            <div class="row align-items-center mb-5">
+                <div class="col-lg-8 mb-4 mb-lg-0">
+                    <div class="d-flex align-items-center">
+                        <div>
+                            <h2>Post An Interview</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
+            <!-- 表单具体内容 -->
+            <div class="row mb-5">
+                <div class="col-lg-12">
+                    <form id="interview-form" class="p-4 p-md-5 border rounded" action="{{ url_for('postinterviewaction') }}" method="post" enctype="multipart/form-data">
+                        <h3 class="text-black mb-5 border-bottom pb-2">Interview Details</h3>
+
+                        <div class="form-group">
+                            <label for="position-id">Position ID</label>
+                            <input type="text" class="form-control" id="position-id" name="position_id" placeholder="Position ID">
+                        </div>
+                        <div class="form-group">
+                            <label for="candidate-id">Candidate ID</label>
+                            <input type="text" class="form-control" id="candidate-id" name="candidate_id" placeholder="Candidate ID">
+                        </div>
+                        <div class="form-group">
+                            <label for="interview-time">Interview Time</label>
+                            <input type="datetime-local" class="form-control" id="interview-time" name="interview_time">
+                        </div>
+                        <div class="form-group">
+                            <label for="interview-format">Interview Format</label>
+                            <select class="form-control" id="interview-format" name="interview_format">
+                                <option value="Phone">Phone</option>
+                                <option value="Video">Video</option>
+                                <option value="In-Person">In-Person</option>
+                                <option value="Online">Online</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-primary btn-md" value="Submit Interview">
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </section>
 </div>

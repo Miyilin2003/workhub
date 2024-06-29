@@ -18,7 +18,7 @@ admin = Admin(app, name='My Admin', template_mode='bootstrap3')
 app.secret_key = 'your_secret_key'
 app.config['UPLOAD_FOLDER'] = 'uploads/'
 # 将040428改为自己的数据库密码，将jobseeker改为自己的数据库名
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:152668@localhost/jobseeker'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:zhujingbo030420@localhost/jobseeker'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 resume_id = 0
 job_id = 0
@@ -95,11 +95,13 @@ class JobApplication(db.Model):
 
 class Interview(db.Model):
     __tablename__ = 'interviews'
-    interview_id = db.Column(db.String(255), primary_key=True)
+    interview_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     position_id = db.Column(db.String(255), db.ForeignKey('jobs.job_id'))
     candidate_id = db.Column(db.String(255), db.ForeignKey('users.user_id'))
     interview_time = db.Column(db.DateTime)
     interview_format = db.Column(db.String(255))
+    sender_id = db.Column(db.String(255), nullable=False)
+    receiver_id = db.Column(db.String(255), nullable=False)
 # 为每个模型视图添加搜索功能
 class UserView(ModelView):
     column_searchable_list = ('name', 'email', 'username', 'phone')
@@ -251,6 +253,98 @@ def js_joblist():
     # print(job_list)
 
     return render_template('js_joblist.html', jobs=job_list)
+
+@app.route('/jsinterviews')
+def jsinterviews():
+    user_id = session['user_id']
+    if user_id is None:
+        return "User not logged in", 401
+    print(user_id)
+    # 查询面试信息，按ID排序
+    interviews = Interview.query.filter_by(receiver_id=user_id).order_by(Interview.interview_id.desc()).all()
+    interview_list = []
+    for interview in interviews:
+        interview_info = {
+            'interview_id': interview.interview_id,
+            'position_id': interview.position_id,
+            'candidate_id': interview.candidate_id,
+            'interview_time': interview.interview_time,
+            'interview_format': interview.interview_format,
+            'sender_id': interview.sender_id,
+            'receiver_id': interview.receiver_id
+        }
+        interview_list.append(interview_info)
+    print(interview_list)
+    return render_template('js_interviews.html', interviews=interview_list)
+
+@app.route('/hrinterviewlist')
+def hrinterviewlist():
+    user_id = session['user_id']
+    if user_id is None:
+        return "User not logged in", 401
+
+    # 查询面试信息，按ID排序
+    interviews = Interview.query.filter_by(sender_id=user_id).order_by(Interview.interview_id.desc()).all()
+    interview_list = []
+    for interview in interviews:
+        interview_info = {
+            'interview_id': interview.interview_id,
+            'position_id': interview.position_id,
+            'candidate_id': interview.candidate_id,
+            'interview_time': interview.interview_time,
+            'interview_format': interview.interview_format,
+            'sender_id': interview.sender_id,
+            'receiver_id': interview.receiver_id
+        }
+        interview_list.append(interview_info)
+    print(interview_list)
+    return render_template('hr_interviewlist.html', interviews=interview_list)
+
+@app.route('/js_interviewdetails_<interview_id>')
+def js_interviewdetails(interview_id):
+    print(interview_id)
+    interview = Interview.query.get_or_404(interview_id)
+    return render_template('js_interviewdetails.html', interview=interview)
+
+@app.route('/hr_interviewdetails_<interview_id>')
+def hr_interviewdetails(interview_id):
+    print(interview_id)
+    interview = Interview.query.get_or_404(interview_id)
+    return render_template('hr_interviewdetails.html', interview=interview)
+
+@app.route('/tohr_postinterviews')
+def tohr_postinterviews():
+    return render_template('hr_postinterviews.html')
+
+@app.route('/tojs_interviews')
+def tojs_interviews():
+    return render_template('js_interviews.html')
+
+@app.route('/postinterviewaction', methods=['GET', 'POST'])
+def postinterviewaction():
+    if request.method == 'POST':
+        position_id = request.form['position_id']
+        candidate_id = request.form['candidate_id']
+        interview_time = request.form['interview_time']
+        interview_format = request.form['interview_format']
+        sender_id = session['user_id']  # Assuming the sender is the logged-in user
+        receiver_id = request.form['candidate_id']
+        print(sender_id)
+        new_interview = Interview(
+            position_id=position_id,
+            candidate_id=candidate_id,
+            interview_time=interview_time,
+            interview_format=interview_format,
+            sender_id=sender_id,
+            receiver_id=receiver_id
+        )
+
+        db.session.add(new_interview)
+        db.session.commit()
+        return redirect(url_for('hrinterviewlist'))
+
+    return render_template('post-interview.html')
+
 @app.route('/js_chooseresumes_<job_id>')
 def js_chooseresumes(job_id):
     user_id = session['user_id']
@@ -317,6 +411,12 @@ def js_resumedetails(resume_id):
     print(resume_id)
     resume = Resume.query.get_or_404(resume_id)
     return render_template('js_resumedetails.html', resume=resume,resume_id=resume_id)
+
+@app.route('/hr_resumedetails_<resume_id>')
+def hr_resumedetails(resume_id):
+    print(resume_id)
+    resume = Resume.query.get_or_404(resume_id)
+    return render_template('hr_resumedetails.html', resume=resume,resume_id=resume_id)
 
 @app.route('/js_jobdetails_<job_id>')
 def js_jobdetails(job_id):

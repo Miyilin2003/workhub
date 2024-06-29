@@ -25,7 +25,7 @@
 
 <div class="site-wrap">
 
-    <div class="site-mobile-menu site-navbar-target">
+   <div class="site-mobile-menu site-navbar-target">
         <div class="site-mobile-menu-header">
             <div class="site-mobile-menu-close mt-3">
                 <span class="icon-close2 js-menu-toggle"></span>
@@ -44,21 +44,16 @@
                 <li><a href="hr_joblist">Job</a></li>
                   <li><a href="hr_message">Messages</a></li>
                   <li><a href="/hrinterviewlist">Interview</a></li>
-{#                <li><a href="contact.html">Contact</a></li>#}
-
-                  <li class="d-lg-none"><a href="post-job.html"><span class="mr-2">+</span> Post a Job</a></li>
                 <li class="d-lg-none"><a href="/login" methods=['GET']>Log In</a></li>
               </ul>
             </nav>
 
-            <div class="right-cta-menu text-right d-flex aligin-items-center col-6">
+            <div class="right-cta-menu text-right d-flex align-items-center col-6">
               <div class="ml-auto">
-                <a href="postjob" class="btn btn-outline-white border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-add"></span>Post a Job</a>
-                <a href="/logout" methods=['GET'] class="btn btn-primary border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-lock_outline"></span>Log Out</a>
+                <a href="/login" methods=['GET'] class="btn btn-primary border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-lock_outline"></span>Log In</a>
               </div>
               <a href="#" class="site-menu-toggle js-menu-toggle d-inline-block d-xl-none mt-lg-2 ml-3"><span class="icon-menu h3 m-0 p-0 mt-2"></span></a>
             </div>
-
           </div>
         </div>
       </header>
@@ -67,19 +62,52 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-7">
-{#                    <h1 class="text-white font-weight-bold">HR HOME</h1>#}
+                    <h1 class="text-white font-weight-bold">Interview {{ interview.interview_id }} Details</h1>
                     <div class="custom-breadcrumbs">
-{#                        <a href="#">Home</a> <span class="mx-2 slash">/</span>#}
-{#                        <span class="text-white"><strong>Home</strong></span>#}
-{#                        <a href="#">Job</a> <span class="mx-2 slash">/</span>#}
-{#                        <span class="text-white"><strong>Post a Job</strong></span>#}
+                        <a href="jshome">Home</a> <span class="mx-2 slash">/</span>
+                        <a href="jsinterviewlist">Interviews</a> <span class="mx-2 slash">/</span>
+                        <span class="text-white"><strong>Interview Details</strong></span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
+    <section class="site-section">
+        <div class="container">
 
+            <!-- 表单具体内容 -->
+            <div class="row mb-5">
+                <div class="col-lg-12">
+                    <div id="interview-details" class="p-4 p-md-5 border rounded">
+                        <h3 class="text-black mb-5 border-bottom pb-2">Interview Details</h3>
+                        <div class="form-group">
+                            <label for="position_id">Position ID: </label>
+                            <p id="position_id">{{ interview.position_id }}</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="candidate_id">Candidate ID</label>
+                            <p id="candidate_id">{{ interview.candidate_id }}</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="interview_time">Interview Time</label>
+                            <p id="interview_time">{{ interview.interview_time }}</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="interview_format">Interview Format</label>
+                            <p id="interview_format">{{ interview.interview_format }}</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="sender_id">Sender ID</label>
+                            <p id="sender_id">{{ interview.sender_id }}</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="receiver_id">Receiver ID</label>
+                            <p id="receiver_id">{{ interview.receiver_id }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 </div>

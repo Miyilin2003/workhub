@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title>Resume List</title>
+    <title>Interview List</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/custom-bs.css') }}">
@@ -13,30 +13,6 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/animate.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/quill.snow.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <style>
-        .niceButton3 {
-            background-color: #1795bb;
-            border-radius: 12px;
-            border: none;
-            color: white;
-            padding: 16px 32px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            -webkit-transition-duration: 0.4s;
-            transition-duration: 0.4s;
-            cursor: pointer;
-          }
-          .niceButton3:hover {
-            background-color: #fff;
-            color: #1795bb;
-            border: 1px solid #ccc;
-          }
-    
-    
-        </style>
 </head>
 <body id="top">
 
@@ -55,19 +31,19 @@
 
                 <nav class="mx-auto site-navigation">
                     <ul class="site-menu js-clone-nav d-none d-xl-block ml-0 pl-0">
-                    <li><a href="/jshome" >Home</a></li>
-                    <li><a href="/jsresumelist" class="nav-link active" >Resume</a></li>
-                        <li><a href="/js_joblist">Jobs</a></li>
-                        <li><a href="js_message">Messages</a></li>
-                        <li><a href=/jsinterviews>Interview</a></li>
+                <li><a href="hr_home" class="nav-link active">Home</a></li>
+                <li><a href="hr_joblist">Job</a></li>
+                  <li><a href="hr_message">Messages</a></li>
+                  <li><a href="tohr_postinterviews">PostInterviews</a></li>
+                  <li><a href="/hrinterviewlist">Interview</a></li>
                         <li class="d-lg-none"><a href="/login" methods=['GET']>Log In</a></li>
                     </ul>
                 </nav>
 
                 <div class="right-cta-menu text-right d-flex align-items-center col-6">
                     <div class="ml-auto">
-                        <a href="/jsresume" class="btn btn-outline-white border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-add"></span>Post A Resume</a>
-                        <a href="/logout" methods=['GET'] class="btn btn-primary border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-lock_outline"></span>Log Out</a>
+                        <a href="/tohr_postinterviews" class="btn btn-outline-white border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-add"></span>Post An Interview</a>
+                        <a href="/login" methods=['GET'] class="btn btn-primary border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-lock_outline"></span>Log In</a>
                     </div>
                     <a href="#" class="site-menu-toggle js-menu-toggle d-inline-block d-xl-none mt-lg-2 ml-3"><span class="icon-menu h3 m-0 p-0 mt-2"></span></a>
                 </div>
@@ -92,27 +68,26 @@
                 <div class="col-lg-8 mb-4 mb-lg-0">
                     <div class="d-flex align-items-center">
                         <div>
-                            <h2>Resume List</h2>
+                            <h2>Interview List</h2>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Resume List -->
+            <!-- Interview List -->
             <div class="row d-flex justify-content-center">
-                {% for resume in resumes %}
+                {% for interview in interviews %}
                     <div class="col-12 mb-4">
-                        <div class="p-4 p-md-5 border rounded resume-card">
-                            <p>Education Background: {{ resume.education_background }}</p>
-                            <p>Work Experience: {{ resume.work_experience }}</p>
-                            <p>Skills and Certificates: {{ resume.skills_and_certificates }}</p>
-                            <p>Career Objective: {{ resume.career_objective }}</p>
+                        <div class="p-4 p-md-5 border rounded interview-card">
+                            <p>Position ID: {{ interview.position_id }}</p>
+                            <p>Candidate ID: {{ interview.candidate_id }}</p>
+                            <p>Interview Time: {{ interview.interview_time }}</p>
+                            <p>Interview Format: {{ interview.interview_format }}</p>
+                            <p>Sender ID: {{ interview.sender_id }}</p>
+                            <p>Receiver ID: {{ interview.receiver_id }}</p>
 
-                            <a href="{{ url_for('js_resumedetails',resume_id=resume.resume_id) }}">View Details</a>
+                            <a href="{{ url_for('hr_interviewdetails', interview_id=interview.interview_id) }}">View Details</a>
                         </div>
-                        <button class="niceButton3">
-                            <a href="{{ url_for('js_sendresumes',job_id=job_id,resume_id=resume.resume_id) }}">投递简历</a>
-                        </button>
                     </div>
                 {% endfor %}
             </div>
@@ -135,4 +110,3 @@
 <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
 </body>
 </html>
-

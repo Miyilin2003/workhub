@@ -58,6 +58,7 @@
                       <li><a href="hr_joblist">Job</a></li>
                         <li><a href="recerived_resume" class="nav-link active">Resume</a></li>
                         <li><a href="hr_message">Messages</a></li>
+                        <li><a href="/hrinterviewlist">Interview</a></li>
       {#                <li><a href="contact.html">Contact</a></li>#}
       
                         <li class="d-lg-none"><a href="post-job.html"><span class="mr-2">+</span> Post a Job</a></li>
@@ -109,11 +110,10 @@
                             <p>Skills and Certificates: {{ resume.skills_and_certificates }}</p>
                             <p>Career Objective: {{ resume.career_objective }}</p>
 
-                            <a href="{{ url_for('js_resumedetails',resume_id=resume.resume_id) }}">View Details</a>
+                            <a href="{{ url_for('hr_resumedetails',resume_id=resume.resume_id) }}">View Details</a>
                         </div>
-                        <button class="niceButton3">
-                            <a href=#>面试邀请</a>
-                        </button>
+                        <a href="{{ url_for('tohr_postinterviews') }}" class="niceButton3">面试邀请</a>
+
                     </div>
                 {% endfor %}
             </div>
