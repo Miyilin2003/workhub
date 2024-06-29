@@ -1,0 +1,135 @@
+<!doctype html>
+<html class="no-js" lang="zxx">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>admin</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="shortcut icon" type="image/x-icon" href="static/static1/images/favicon.ico">
+
+    <!-- CSS here -->
+    <link rel="stylesheet" href="static/static1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/static1/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="static/static1/css/slicknav.css">
+    <link rel="stylesheet" href="static/static1/css/animate.min.css">
+    <link rel="stylesheet" href="static/static1/css/magnific-popup.css">
+    <link rel="stylesheet" href="static/static1/css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="static/static1/css/themify-icons.css">
+    <link rel="stylesheet" href="static/static1/css/slick.css">
+    <link rel="stylesheet" href="static/static1/css/nice-select.css">
+    <link rel="stylesheet" href="static/static1/css/style.css">
+</head>
+<body>
+    <header>
+        <div class="header-area header-transparent">
+            <div class="main-header header-sticky">
+                <div class="container">
+                    <div class="menu-wrapper d-flex align-items-center justify-content-between">
+                        <div class="left-content d-flex align-items-center">
+                            <div class="logo mr-45">
+                                <a href="index.html"><img src="static/static1/images/logo/logo.png" alt=""></a>
+                            </div>
+                            <!-- Main-menu -->
+                            <div class="main-menu d-none d-lg-block">
+                                <nav>
+                                    <ul id="navigation">                                     
+                                        <li><a href="{{ url_for('admin1') }}">Home</a></li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>     
+                        <!-- Button -->
+                        <div class="buttons">
+                            <ul>
+                                <li class="button-header">
+                                    <a href="{{ url_for('logout') }}" class="btn header-btn2">Log Out</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- Mobile Menu -->
+                    <div class="col-12">
+                        <div class="mobile_menu d-block d-lg-none"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main>
+        <!-- Slider Area Start-->
+        <div class="slider-area position-relative ">
+            <!-- Single -->
+            <div class="single-sliders slider-height  gray-bg d-flex align-items-center">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-xl-6 col-lg-7">
+                            <div class="hero-caption">
+                                <span>Easiest way to manage platform</span>
+                                <h2>Review of personnel information and job information</h2>                                    
+                                <!-- Hero-btn -->
+                                <div class="slider-btns">
+                                    <a  href="{{ url_for('admin.index') }}"" class=btn hero-btn">begin</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+            <!--Hero tittle -->
+            <div class="hero-tittle">
+                <h2>jobs</h2>
+            </div>
+            <!-- Hero img -->
+            <div class="hero-img">
+                <img src="static/static1/images/hero/hero-img.png" alt="">
+            </div>
+            <!-- hero shape 1-->
+            <div class="hero-shape bounce-animate">
+                <img src="static/static1/images/hero/hero-shape.png" alt="">
+            </div>
+            <!-- hero shape 2-->
+            <div class="hero-shape2">
+                <img src="static/static1/images/hero/hero-shape2.png" alt="">
+            </div>
+        </div>
+        <!-- Slider Area End -->
+
+
+
+    </main>
+    <div id="back-top" >
+        <a title="Go to Top" href="#"> <i class="fas fa-level-up-alt"></i></a>
+    </div>
+
+    <!-- JS here -->
+    <!-- Jquery, Popper, Bootstrap -->
+    <script src="static/static1/js/vendor/modernizr-3.5.0.min.js"></script>
+    <script src="static/static1/js/vendor/jquery-1.12.4.min.js"></script>
+    <script src="static/static1/js/popper.min.js"></script>
+    <script src="static/static1/js/bootstrap.min.js"></script>
+
+    <!-- Slick , Owl-Carousel , Mobile Menu-->
+    <script src="static/static1/js/owl.carousel.min.js"></script>
+    <script src="static/static1/js/slick.min.js"></script>
+    <script src="static/static1/js/jquery.slicknav.min.js"></script>
+    <script src="static/static1/js/range.js"></script>
+
+    <!-- wow, popup, Nice-select  -->
+    <script src="static/static1/js/wow.min.js"></script>
+    <script src="static/static1/js/jquery.magnific-popup.js"></script>
+    <script src="static/static1/js/jquery.nice-select.min.js"></script>
+
+    <!-- contact js -->
+    <script src="static/static1/js/contact.js"></script>
+    <script src="static/static1/js/jquery.form.js"></script>
+    <script src="static/static1/js/jquery.validate.min.js"></script>
+    <script src="static/static1/js/mail-script.js"></script>
+    <script src="static/static1/js/jquery.ajaxchimp.min.js"></script>
+
+    <!-- Jquery Plugins, main Jquery -->	
+    <script src="static/static1/js/plugins.js"></script>
+    <script src="static/static1/js/main.js"></script>
+</body>
+</html>

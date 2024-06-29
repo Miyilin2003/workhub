@@ -4,10 +4,12 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask.cli import with_appcontext
 import click
 import os
-
+from flask_admin import Admin
 import requests
+from flask_admin.contrib.sqla import ModelView
 
 app = Flask(__name__)
+admin = Admin(app, name='My Admin', template_mode='bootstrap3')
 app.secret_key = 'your_secret_key'
 app.config['UPLOAD_FOLDER'] = 'uploads/'
 # 将040428改为自己的数据库密码，将jobseeker改为自己的数据库名
@@ -88,6 +90,37 @@ class Interview(db.Model):
     candidate_id = db.Column(db.String(255), db.ForeignKey('users.user_id'))
     interview_time = db.Column(db.DateTime)
     interview_format = db.Column(db.String(255))
+# 为每个模型视图添加搜索功能
+class UserView(ModelView):
+    column_searchable_list = ('name', 'email', 'username', 'phone')
+
+class JobSeekerView(ModelView):
+    column_searchable_list = ('name',)
+
+class HumanResourcesView(ModelView):
+    column_searchable_list = ('name',)
+
+class ResumeView(ModelView):
+    column_searchable_list = ('resume_id', 'user_id')
+
+class JobView(ModelView):
+    column_searchable_list = ('job_title', 'company_name', 'job_location', 'email')
+
+class JobApplicationView(ModelView):
+    column_searchable_list = ('application_id', 'job_seeker_id', 'position_id', 'status')
+
+class InterviewView(ModelView):
+    column_searchable_list = ('interview_id', 'position_id', 'candidate_id', 'interview_format')
+
+# 添加模型视图
+admin.add_view(UserView(User, db.session))
+admin.add_view(JobSeekerView(JobSeeker, db.session))
+admin.add_view(HumanResourcesView(HumanResources, db.session))
+admin.add_view(ResumeView(Resume, db.session))
+admin.add_view(JobView(Job, db.session))
+admin.add_view(JobApplicationView(JobApplication, db.session))
+admin.add_view(InterviewView(Interview, db.session))
+
 
 @click.command(name='create_tables')
 @with_appcontext
@@ -153,11 +186,15 @@ def login():
             elif session['identify'] == 'HumanResource':
                 return redirect(url_for('postjob'))
             elif session['identify'] == 'Admin':
-                return redirect(url_for('home'))
+                return redirect(url_for('admin1'))
         else:
             return 'Invalid credentials'
 
     return render_template('login.html')
+
+@app.route('/admin1')
+def admin1():
+    return render_template('admin.html')
 
 @app.route('/postjob')
 def postjob():
