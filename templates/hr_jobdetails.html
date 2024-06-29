@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>JobBoard &mdash; Website Template by Colorlib</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="static/css/custom-bs.css">
+    <link rel="stylesheet" href="static/css/jquery.fancybox.min.css">
+    <link rel="stylesheet" href="static/css/bootstrap-select.min.css">
+    <link rel="stylesheet" href="static/fonts/icomoon/style.css">
+    <link rel="stylesheet" href="static/fonts/line-icons/style.css">
+    <link rel="stylesheet" href="static/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="static/css/animate.min.css">
+    <link rel="stylesheet" href="static/css/quill.snow.css">
+    <link rel="stylesheet" href="static/css/style.css">
+</head>
+<body id="top">
+
+<div id="overlayer"></div>
+<div class="loader">
+    <div class="spinner-border text-primary" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+
+<div class="site-wrap">
+
+   <div class="site-mobile-menu site-navbar-target">
+        <div class="site-mobile-menu-header">
+            <div class="site-mobile-menu-close mt-3">
+                <span class="icon-close2 js-menu-toggle"></span>
+            </div>
+        </div>
+        <div class="site-mobile-menu-body"></div>
+    </div> <!-- .site-mobile-menu -->
+    <header class="site-navbar mt-3">
+        <div class="container-fluid">
+          <div class="row align-items-center">
+            <div class="site-logo col-6"><a href="index.html">JobBoard</a></div>
+
+            <nav class="mx-auto site-navigation">
+              <ul class="site-menu js-clone-nav d-none d-xl-block ml-0 pl-0">
+                <li><a href="hr_home" >Home</a></li>
+                <li><a href="hr_joblist" class="nav-link active">Job</a></li>
+                  <li><a href="recerived_resume">Resume</a></li>
+                  <li><a href="hr_message">Messages</a></li>
+{#                <li><a href="contact.html">Contact</a></li>#}
+{#                <li class="d-lg-none"><a href="post-job.html"><span class="mr-2">+</span> Post a Job</a></li>#}
+                <li class="d-lg-none"><a href="/login" methods=['GET']>Log In</a></li>
+              </ul>
+            </nav>
+
+            <div class="right-cta-menu text-right d-flex aligin-items-center col-6">
+              <div class="ml-auto">
+{#                <a href="post-job.html" class="btn btn-outline-white border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-add"></span>Post a Job</a>#}
+                <a href="/login" methods=['GET'] class="btn btn-primary border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-lock_outline"></span>Log In</a>
+              </div>
+              <a href="#" class="site-menu-toggle js-menu-toggle d-inline-block d-xl-none mt-lg-2 ml-3"><span class="icon-menu h3 m-0 p-0 mt-2"></span></a>
+            </div>
+
+          </div>
+        </div>
+      </header>
+    <!-- HOME -->
+    <section class="section-hero overlay inner-page bg-image" style="background-image: url('static/images/hero_1.jpg');" id="home-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-7">
+                    <h1 class="text-white font-weight-bold">Job {{job.job_title}} Details</h1>
+                    <div class="custom-breadcrumbs">
+                        <a href="hr_home">Home</a> <span class="mx-2 slash">/</span>
+                        <a href="hr_joblist">Job</a> <span class="mx-2 slash">/</span>
+                        <span class="text-white"><strong>Job Details</strong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="site-section">
+        <div class="container">
+
+            <!-- 表单具体内容 -->
+            <div class="row mb-5">
+                <div class="col-lg-12">
+                    <form id="job-form" class="p-4 p-md-5 border rounded" action="{{ url_for('change_post',job_id=job.job_id) }}" method="post" enctype="multipart/form-data">
+                        <h3 class="text-black mb-5 border-bottom pb-2">Job Details</h3>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="text" class="form-control" id="email" name="email" placeholder="you@yourdomain.com" value="{{ job.email }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="job-title">Job Title</label>
+                        <input type="text" class="form-control" id="job-title" name="job_title" placeholder="Product Designer" value="{{ job.job_title }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="job-location">Location</label>
+                        <input type="text" class="form-control" id="job-location" name="job_location" placeholder="e.g. New York" value="{{ job.job_location }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="job-type">Job Type</label>
+                        <select class="selectpicker border rounded" id="job-type" name="job_type" data-style="btn-black" data-width="100%" data-live-search="true" title="Select Job Type">
+                            <option value="Part Time" {% if job.job_type == 'Part Time' %}selected{% endif %}>Part Time</option>
+                            <option value="Full Time" {% if job.job_type == 'Full Time' %}selected{% endif %}>Full Time</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="job-description">Job Description</label>
+                        <input type="text" class="form-control" id="job-description" name="job_description" placeholder="Write Job Description!" value="{{ job.job_description }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="salary-range">Salary Range</label>
+                        <input type="text" class="form-control" id="salary-range" name="salary_range" placeholder="Salary Range" value="{{ job.salary_range }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="publish-date">Publish Date</label>
+                        <input type="date" class="form-control" id="publish-date" name="publish_date" value="{{ job.publish_date }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="status">Status</label>
+                        <select class="form-control" id="status" name="status">
+                            <option value="True" {% if job.status %}selected{% endif %}>Active</option>
+                            <option value="False" {% if not job.status %}selected{% endif %}>Inactive</option>
+                        </select>
+                    </div>
+
+                    <h3 class="text-black my-5 border-bottom pb-2">Company Details</h3>
+                    <div class="form-group">
+                        <label for="company-name">Company Name</label>
+                        <input type="text" class="form-control" id="company-name" name="company_name" placeholder="e.g. New York" value="{{ job.company_name }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="company-tagline">Tagline (Optional)</label>
+                        <input type="text" class="form-control" id="company-tagline" name="company_tagline" placeholder="e.g. New York" value="{{ job.company_tagline }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="company-description">Company Description</label>
+                        <input type="text" class="form-control" id="company-description" name="company_description" placeholder="Write company Description!" value="{{ job.company_description }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="company-website">Website (Optional)</label>
+                        <input type="text" class="form-control" id="company-website" name="company_website" placeholder="https://" value="{{ job.company_website }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="company-email">Company Email (Optional)</label>
+                        <textarea class="form-control" id="company-email" name="company_email" placeholder="aa@bbbb.com">{{ job.company_email }}</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-primary btn-md" value="Submit Job">
+                    </div>
+                </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- SCRIPTS -->
+
+<script src="static/js/jquery.min.js"></script>
+<script src="static/js/bootstrap.bundle.min.js"></script>
+<script src="static/js/isotope.pkgd.min.js"></script>
+<script src="static/js/stickyfill.min.js"></script>
+<script src="static/js/jquery.fancybox.min.js"></script>
+<script src="static/js/jquery.easing.1.3.js"></script>
+<script src="static/js/jquery.waypoints.min.js"></script>
+<script src="static/js/jquery.animateNumber.min.js"></script>
+<script src="static/js/owl.carousel.min.js"></script>
+<script src="static/js/quill.min.js"></script>
+<script src="static/js/bootstrap-select.min.js"></script>
+<script src="static/js/custom.js"></script>
+</body>
+</html>

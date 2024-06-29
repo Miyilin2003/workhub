@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="static/css/owl.carousel.min.css">
     <link rel="stylesheet" href="static/css/animate.min.css">
     <link rel="stylesheet" href="static/css/quill.snow.css">
-    <link rel="stylesheet" href="static/css/style.css">    
+    <link rel="stylesheet" href="static/css/style.css">
 </head>
 <body id="top">
 
@@ -40,24 +40,21 @@
 
             <nav class="mx-auto site-navigation">
               <ul class="site-menu js-clone-nav d-none d-xl-block ml-0 pl-0">
-                <li><a href="hr_home" >Home</a></li>
-                <li><a href="hr_joblist" class="nav-link active">Job</a></li>
-                  <li><a href="recerived_resume">Resume</a></li>
-                  <li><a href="message">Messages</a></li>
-{#                <li><a href="contact.html">Contact</a></li>#}
-{#                <li class="d-lg-none"><a href="post-job.html"><span class="mr-2">+</span> Post a Job</a></li>#}
-                <li class="d-lg-none"><a href="login.html">Log In</a></li>
+<li><a href="/jshome" >Home</a></li>
+                    <li><a href="/jsresumelist">Resume</a></li>
+                        <li><a href="/js_joblist" class="nav-link active">Jobs</a></li>
+                        <li><a href="js_message">Messages</a></li>
+                <li class="d-lg-none"><a href="/login" methods=['GET']>Log In</a></li>
               </ul>
             </nav>
 
-            <div class="right-cta-menu text-right d-flex aligin-items-center col-6">
+            <div class="right-cta-menu text-right d-flex align-items-center col-6">
               <div class="ml-auto">
-{#                <a href="post-job.html" class="btn btn-outline-white border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-add"></span>Post a Job</a>#}
                 <a href="/login" methods=['GET'] class="btn btn-primary border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-lock_outline"></span>Log In</a>
               </div>
               <a href="#" class="site-menu-toggle js-menu-toggle d-inline-block d-xl-none mt-lg-2 ml-3"><span class="icon-menu h3 m-0 p-0 mt-2"></span></a>
             </div>
-  
+
           </div>
         </div>
       </header>
@@ -66,11 +63,11 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-7">
-                    <h1 class="text-white font-weight-bold">Post A Job</h1>
+                    <h1 class="text-white font-weight-bold">Job {{ job.job_title }} Details</h1>
                     <div class="custom-breadcrumbs">
-                        <a href="hr_home">Home</a> <span class="mx-2 slash">/</span>
-                        <a href="hr_joblist">Job</a> <span class="mx-2 slash">/</span>
-                        <span class="text-white"><strong>Post a Job</strong></span>
+                        <a href="jshome">Home</a> <span class="mx-2 slash">/</span>
+                        <a href="jsjoblist">Job</a> <span class="mx-2 slash">/</span>
+                        <span class="text-white"><strong>Job Details</strong></span>
                     </div>
                 </div>
             </div>
@@ -79,104 +76,79 @@
 
     <section class="site-section">
         <div class="container">
-            <div class="row align-items-center mb-5">
-                <div class="col-lg-8 mb-4 mb-lg-0">
-                    <div class="d-flex align-items-center">
-                        <div>
-                            <h2>Post A Job</h2>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <!-- 表单具体内容 -->
             <div class="row mb-5">
                 <div class="col-lg-12">
-                    <form id="job-form" class="p-4 p-md-5 border rounded" action="{{ url_for('postjobaction') }}" method="post" enctype="multipart/form-data">
+                    <div id="job-details" class="p-4 p-md-5 border rounded">
                         <h3 class="text-black mb-5 border-bottom pb-2">Job Details</h3>
-
+                        <div class="form-group">
+                            <label for="publisher_id">Publisher ID: </label>
+                            <a href="{{ url_for('js_chat',publisher_id=job.publisher_id) }}"  id="publisher_id ">{{ job.publisher_id  }}</a>
+                        </div>
                         <div class="form-group">
                             <label for="email">Email</label>
-                            <input type="text" class="form-control" id="email" name="email" placeholder="you@yourdomain.com">
+                            <p id="email">{{ job.email }}</p>
                         </div>
                         <div class="form-group">
                             <label for="job-title">Job Title</label>
-                            <input type="text" class="form-control" id="job-title" name="job_title" placeholder="Product Designer">
+                            <p id="job-title">{{ job.job_title }}</p>
                         </div>
                         <div class="form-group">
                             <label for="job-location">Location</label>
-                            <input type="text" class="form-control" id="job-location" name="job_location" placeholder="e.g. New York">
+                            <p id="job-location">{{ job.job_location }}</p>
                         </div>
-
 
                         <div class="form-group">
                             <label for="job-type">Job Type</label>
-                            <select class="selectpicker border rounded" id="job-type" name="job_type" data-style="btn-black" data-width="100%" data-live-search="true" title="Select Job Type">
-                                <option>Part Time</option>
-                                <option>Full Time</option>
-                            </select>
+                            <p id="job-type">{{ job.job_type }}</p>
                         </div>
-
 
                         <div class="form-group">
                             <label for="job-description">Job Description</label>
-                            <input type="text" class="form-control" id="job-description" name="job_description" placeholder="Write Job Description!">
+                            <p id="job-description">{{ job.job_description }}</p>
                         </div>
 
                         <div class="form-group">
                             <label for="salary-range">Salary Range</label>
-                            <input type="text" class="form-control" id="salary-range" name="salary_range" placeholder="Salary Range">
+                            <p id="salary-range">{{ job.salary_range }}</p>
                         </div>
-
 
                         <div class="form-group">
                             <label for="publish-date">Publish Date</label>
-                            <input type="date" class="form-control" id="publish-date" name="publish_date">
+                            <p id="publish-date">{{ job.publish_date }}</p>
                         </div>
 
                         <div class="form-group">
                             <label for="status">Status</label>
-                            <select class="form-control" id="status" name="status">
-                                <option value="True">Active</option>
-                                <option value="False">Inactive</option>
-                            </select>
+                            <p id="status">{{ 'Active' if job.status else 'Inactive' }}</p>
                         </div>
 
                         <h3 class="text-black my-5 border-bottom pb-2">Company Details</h3>
                         <div class="form-group">
                             <label for="company-name">Company Name</label>
-                            <input type="text" class="form-control" id="company-name" name="company_name" placeholder="e.g. New York">
+                            <p id="company-name">{{ job.company_name }}</p>
                         </div>
 
                         <div class="form-group">
                             <label for="company-tagline">Tagline (Optional)</label>
-                            <input type="text" class="form-control" id="company-tagline" name="company_tagline" placeholder="e.g. New York">
+                            <p id="company-tagline">{{ job.company_tagline }}</p>
                         </div>
 
-
                         <div class="form-group">
-                            <label for="company-description">Job Description</label>
-                            <input type="text" class="form-control" id="company-description" name="company_description" placeholder="Write company Description!">
+                            <label for="company-description">Company Description</label>
+                            <p id="company-description">{{ job.company_description }}</p>
                         </div>
                         <div class="form-group">
                             <label for="company-website">Website (Optional)</label>
-                            <input type="text" class="form-control" id="company-website" name="company_website" placeholder="https://">
+                            <p id="company-website">{{ job.company_website }}</p>
                         </div>
 
                         <div class="form-group">
-                            <label for="requirements">Company Email(Optional)</label>
-                            <textarea class="form-control" id="company-email" name="company_email" placeholder="aa@bbbb.com"></textarea>
+                            <label for="company-email">Company Email (Optional)</label>
+                            <p id="company-email">{{ job.company_email }}</p>
                         </div>
-
-
-
-
-
-
-                        <div class="form-group">
-                            <input type="submit" class="btn btn-primary btn-md" value="Submit Job">
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
