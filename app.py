@@ -16,7 +16,7 @@ admin = Admin(app, name='My Admin', template_mode='bootstrap3')
 app.secret_key = 'your_secret_key'
 app.config['UPLOAD_FOLDER'] = 'uploads/'
 # 将040428改为自己的数据库密码，将jobseeker改为自己的数据库名
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:20030408@localhost/jobseeker'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:152668@localhost/jobseeker'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -138,16 +138,6 @@ class Message(db.Model):
     receiver = db.relationship('User', foreign_keys=[receiver_id])
 
 
-class Message(db.Model):
-    __tablename__ = 'messages'
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    sender_id = db.Column(db.String(255), db.ForeignKey('users.user_id'), nullable=False)
-    receiver_id = db.Column(db.String(255), db.ForeignKey('users.user_id'), nullable=False)
-    context = db.Column(db.Text, nullable=False)
-    timestamp = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp(), nullable=False)
-    # 定义外键关系
-    sender = db.relationship('User', foreign_keys=[sender_id])
-    receiver = db.relationship('User', foreign_keys=[receiver_id])
 
 @click.command(name='create_tables')
 @with_appcontext
@@ -564,6 +554,44 @@ def change_resume(resume_id):
 @app.route('/resume')
 def resume():
     return render_template('resume.html')
+
+@app.route('/upload_resume', methods=['GET', 'POST'])
+def upload_resume():
+    if request.method == 'POST':
+        user_id = request.form['user_id']
+        education_background = request.form['education_background']
+        work_experience = request.form['work_experience']
+        skills_and_certificates = request.form['skills_and_certificates']
+        career_objective = request.form['career_objective']
+        resume_pdf = request.files['resume_pdf']
+
+        if resume_pdf and resume_pdf.filename.endswith('.pdf'):
+            # filename = secure_filename(resume_pdf.filename)
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], resume_pdf.filename)
+            resume_pdf.save(file_path)
+
+            # Upload the PDF to ufile.io
+
+            personal_profile = file_path
+
+                # Save to database (example, adjust as needed)
+            new_resume = Resume(
+                resume_id=int(user_id),
+                user_id=user_id,
+                education_background=education_background,
+                work_experience=work_experience,
+                skills_and_certificates=skills_and_certificates,
+                personal_profile=personal_profile,
+                career_objective=career_objective
+            )
+            db.session.add(new_resume)
+            db.session.commit()
+
+            return redirect(url_for('resume_success'))
+
+    return render_template('upload_resume.html')
+
+@app.route('/resume_success')
 
 @app.route('/resume_success')
 def resume_success():
