@@ -18,7 +18,7 @@ admin = Admin(app, name='My Admin', template_mode='bootstrap3')
 app.secret_key = 'your_secret_key'
 app.config['UPLOAD_FOLDER'] = 'uploads/'
 # 将040428改为自己的数据库密码，将jobseeker改为自己的数据库名
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:040428@localhost/jobseeker'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:20030408@localhost/jobseeker'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 resume_id = 0
 job_id = 0
