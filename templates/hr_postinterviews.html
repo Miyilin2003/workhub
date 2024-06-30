@@ -43,7 +43,6 @@
                 <li><a href="hr_home" class="nav-link active">Home</a></li>
                 <li><a href="hr_joblist">Job</a></li>
                   <li><a href="hr_message">Messages</a></li>
-                  <li><a href="tohr_postinterviews">PostInterviews</a></li>
                   <li><a href="/hrinterviewlist">Interview</a></li>
                 <li class="d-lg-none"><a href="/login" methods=['GET']>Log In</a></li>
               </ul>
@@ -51,7 +50,8 @@
 
             <div class="right-cta-menu text-right d-flex align-items-center col-6">
               <div class="ml-auto">
-                <a href="/login" methods=['GET'] class="btn btn-primary border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-lock_outline"></span>Log In</a>
+                  <a href="postjob" class="btn btn-outline-white border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-add"></span>Post a Job</a>
+                <a href="/login" methods=['GET'] class="btn btn-primary border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-lock_outline"></span>Log Out</a>
               </div>
               <a href="#" class="site-menu-toggle js-menu-toggle d-inline-block d-xl-none mt-lg-2 ml-3"><span class="icon-menu h3 m-0 p-0 mt-2"></span></a>
             </div>
@@ -90,17 +90,11 @@
             <!-- 表单具体内容 -->
             <div class="row mb-5">
                 <div class="col-lg-12">
-                    <form id="interview-form" class="p-4 p-md-5 border rounded" action="{{ url_for('postinterviewaction') }}" method="post" enctype="multipart/form-data">
+                    <form id="interview-form" class="p-4 p-md-5 border rounded" action="{{ url_for('postinterviewaction', job_id=job_id, receiver_id=receiver_id) }}" method="post" enctype="multipart/form-data">
                         <h3 class="text-black mb-5 border-bottom pb-2">Interview Details</h3>
 
-                        <div class="form-group">
-                            <label for="position-id">Position ID</label>
-                            <input type="text" class="form-control" id="position-id" name="position_id" placeholder="Position ID">
-                        </div>
-                        <div class="form-group">
-                            <label for="candidate-id">Candidate ID</label>
-                            <input type="text" class="form-control" id="candidate-id" name="candidate_id" placeholder="Candidate ID">
-                        </div>
+                        <input type="hidden" name="position_id" value="{{ job_id }}">
+                        <input type="hidden" name="candidate_id" value="{{ receiver_id }}">
                         <div class="form-group">
                             <label for="interview-time">Interview Time</label>
                             <input type="datetime-local" class="form-control" id="interview-time" name="interview_time">

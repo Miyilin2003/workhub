@@ -1,6 +1,6 @@
 from operator import or_
 
-from flask import Flask, render_template, request, redirect, url_for, session, g
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory,session, g
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -18,7 +18,7 @@ admin = Admin(app, name='My Admin', template_mode='bootstrap3')
 app.secret_key = 'your_secret_key'
 app.config['UPLOAD_FOLDER'] = 'uploads/'
 # 将040428改为自己的数据库密码，将jobseeker改为自己的数据库名
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:20030408@localhost/jobseeker'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:zhujingbo030420@localhost/jobseeker'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 resume_id = 0
 job_id = 0
@@ -331,24 +331,24 @@ def hr_interviewdetails(interview_id):
     interview = Interview.query.get_or_404(interview_id)
     return render_template('hr_interviewdetails.html', interview=interview)
 
-@app.route('/tohr_postinterviews')
-def tohr_postinterviews():
-    return render_template('hr_postinterviews.html')
+@app.route('/tohr_postinterviews/<job_id>/<receiver_id>')
+def tohr_postinterviews(job_id, receiver_id):
+    return render_template('hr_postinterviews.html', job_id=job_id, receiver_id=receiver_id)
+
 
 @app.route('/tojs_interviews')
 def tojs_interviews():
     return render_template('js_interviews.html')
 
-@app.route('/postinterviewaction', methods=['GET', 'POST'])
-def postinterviewaction():
+@app.route('/postinterviewaction/<job_id>/<receiver_id>', methods=['GET', 'POST'])
+def postinterviewaction(job_id, receiver_id):
     if request.method == 'POST':
-        position_id = request.form['position_id']
-        candidate_id = request.form['candidate_id']
+        position_id = job_id
+        candidate_id = receiver_id
         interview_time = request.form['interview_time']
         interview_format = request.form['interview_format']
         sender_id = session['user_id']  # Assuming the sender is the logged-in user
-        receiver_id = request.form['candidate_id']
-        print(sender_id)
+
         new_interview = Interview(
             position_id=position_id,
             candidate_id=candidate_id,
@@ -363,6 +363,7 @@ def postinterviewaction():
         return redirect(url_for('hrinterviewlist'))
 
     return render_template('post-interview.html')
+
 
 @app.route('/js_chooseresumes_<job_id>')
 def js_chooseresumes(job_id):
@@ -382,8 +383,7 @@ def js_chooseresumes(job_id):
             'career_objective': resume.career_objective
         }
         resume_list.append(resume_info)
-
-    return render_template('js_resumelist1.html', resumes=resume_list,job_id = job_id)
+    return render_template('js_resumelist1.html', resumes=resume_list, job_id=job_id)
 @app.route('/js_sendresumes_<job_id>_<resume_id>')
 def js_sendresumes( job_id,resume_id):
     application_id = resume_id
@@ -427,7 +427,7 @@ def jsresumelist():
     session['rc']=int(p)
     return render_template('js_resumelist.html', resumes=resume_list)
 
-@app.route('/js_resumedetails_<resume_id>')
+@app.route('/js_details_<resume_id>')
 def js_resumedetails(resume_id):
     print(resume_id)
     resume = Resume.query.get_or_404(resume_id)
@@ -481,6 +481,7 @@ def hr_resumelist(job_id):
     resume_list = []
     for resume in resumes:
         resume_info = {
+            'user_id': resume.user_id,
             'resume_id': resume.resume_id,
             'education_background': resume.education_background,
             'work_experience': resume.work_experience,
@@ -489,7 +490,7 @@ def hr_resumelist(job_id):
         }
         resume_list.append(resume_info)
     print(resume_list)
-    return render_template('hr_resumelist.html', resumes=resume_list)
+    return render_template('hr_resumelist.html', resumes=resume_list,job_id=job_id)
 
 
 @app.route('/hr_jobdetails_<job_id>')
@@ -791,6 +792,19 @@ def upload_resume():
             return redirect(url_for('resume_success'))
 
     return render_template('upload_resume.html')
+
+
+@app.route('/download_resume/<int:resume_id>')
+def download_resume(resume_id):
+    resume = Resume.query.get(resume_id)
+    if resume:
+        file_path = resume.personal_profile
+        directory = os.path.dirname(file_path)
+        filename = os.path.basename(file_path)
+        return send_from_directory(directory, filename, as_attachment=True)
+    else:
+        return "Resume not found", 404
+
 
 
 @app.route('/resume_success')
