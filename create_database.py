@@ -1,12 +1,20 @@
 import pymysql
+import argparse
 from db import create_sql
 
-# MySQL连接参数
-host = 'localhost'
-user = 'root'
-password = '20030408'
-database_name = 'jobseeker'
 
+# MySQL连接参数
+passroot = argparse.ArgumentParser()
+passroot.add_argument('-p', '--password', help='MySQL root password', required=True)
+passroot.add_argument('-d', '--database', help='Database name', default='jobseeker')
+passroot.add_argument('-u', '--user', help='MySQL user name', default='root')
+passroot.add_argument('-h', '--host', help='MySQL host name', default='localhost')
+args = passroot.parse_args()
+
+password = args.password
+database_name = args.database
+user = args.user
+host = args.host
 # 创建数据库连接
 connection = pymysql.connect(host=host, user=user, password=password)
 
